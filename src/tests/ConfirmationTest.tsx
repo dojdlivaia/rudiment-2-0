@@ -8,7 +8,7 @@ interface Props {
   setProfile: (p: UserProfile) => void;
 }
 
-const scenarios = [
+const allScenarios = [
   {
     id: 1,
     title: 'Новая диета',
@@ -45,9 +45,110 @@ const scenarios = [
       { text: 'Инсайдеры продают акции', supports: false },
     ],
   },
+  {
+    id: 4,
+    title: 'Новый метод обучения',
+    setup: 'Ты считаешь, что новый метод обучения эффективен. Какие исследования ты бы прочитал?',
+    evidence: [
+      { text: 'Учитель сообщает о повышении оценок в своём классе', supports: true },
+      { text: 'Контрольная группа без метода показала такой же прогресс', supports: false },
+      { text: 'Автор метода продаёт обучающие курсы', supports: false },
+      { text: 'Школа внедрила метод — результаты не изменились', supports: false },
+      { text: 'Родители довольны новыми подходами', supports: true },
+    ],
+  },
+  {
+    id: 5,
+    title: 'Экологическая инициатива',
+    setup: 'Ты поддерживаешь новую экологическую программу. Какие данные ты бы изучил?',
+    evidence: [
+      { text: 'Активисты сообщают о положительных изменениях', supports: true },
+      { text: 'Анализ показывает, что выбросы не снизились', supports: false },
+      { text: 'Программа стоит в 3 раза дороже запланированного', supports: false },
+      { text: 'Местные жители замечают улучшение качества воздуха', supports: true },
+      { text: 'Независимый аудит не нашёл значимых результатов', supports: false },
+    ],
+  },
+  {
+    id: 6,
+    title: 'Медицинский препарат',
+    setup: 'Ты веришь, что новый препарат эффективен. Какие исследования ты бы прочитал внимательнее?',
+    evidence: [
+      { text: 'Пациенты сообщают об улучшении самочувствия', supports: true },
+      { text: 'Плацебо-группа показала такой же эффект', supports: false },
+      { text: 'Фармкомпания финансировала исследование', supports: false },
+      { text: 'Побочные эффекты серьёзнее ожидаемых', supports: false },
+      { text: 'Врачи заметили положительную динамику', supports: true },
+    ],
+  },
+  {
+    id: 7,
+    title: 'Технологический стартап',
+    setup: 'Ты считаешь, что стартап будет успешным. Какие данные ты бы изучил?',
+    evidence: [
+      { text: 'Основатели харизматичны и уверенно презентуют', supports: true },
+      { text: 'Аналогичные стартапы закрываются в 90% случаев', supports: false },
+      { text: 'Рынок уже насыщен похожими продуктами', supports: false },
+      { text: 'Первые пользователи оставляют положительные отзывы', supports: true },
+      { text: 'Финансовая модель показывает убытки через год', supports: false },
+    ],
+  },
+  {
+    id: 8,
+    title: 'Спортивная команда',
+    setup: 'Ты веришь, что команда выиграет чемпионат. Какие факты ты бы изучил?',
+    evidence: [
+      { text: 'Команда выиграла последние 5 матчей', supports: true },
+      { text: 'Ключевой игрок получил травму', supports: false },
+      { text: 'Конкуренты усилили состав в межсезонье', supports: false },
+      { text: 'Фанаты уверены в победе', supports: true },
+      { text: 'Статистика показывает слабую защиту команды', supports: false },
+    ],
+  },
+  {
+    id: 9,
+    title: 'Книга-бестселлер',
+    setup: 'Ты думаешь, что новая книга станет хитом. Какие отзывы ты бы прочитал?',
+    evidence: [
+      { text: 'Друзья, которым ты дал книгу, в восторге', supports: true },
+      { text: 'Профессиональные критики дали низкие оценки', supports: false },
+      { text: 'Книга похожа на десятки других в этом жанре', supports: false },
+      { text: 'Автор популярен в соцсетях', supports: true },
+      { text: 'Продажи в первую неделю ниже ожидаемых', supports: false },
+    ],
+  },
+  {
+    id: 10,
+    title: 'Переезд в другой город',
+    setup: 'Ты считаешь, что переезд улучшит твою жизнь. Какие факты ты бы изучил?',
+    evidence: [
+      { text: 'Знакомые, переехавшие туда, довольны', supports: true },
+      { text: 'Статистика показывает высокий уровень стресса при переезде', supports: false },
+      { text: 'Стоимость жизни в новом городе на 40% выше', supports: false },
+      { text: 'Ты нашёл работу с хорошей зарплатой', supports: true },
+      { text: 'Большинство переехавших возвращаются через 2 года', supports: false },
+    ],
+  },
 ];
 
+// Функция для получения сценариев, которые пользователь ещё не видел
+function getUnseenScenarios(profile: UserProfile, count: number) {
+  const seenScenarios = new Set<number>();
+  profile.testResults.forEach(result => {
+    if (result.testType === 'confirmation' && result.details.seenIds) {
+      result.details.seenIds.forEach((id: number) => seenScenarios.add(id));
+    }
+  });
+
+  const unseen = allScenarios.filter(s => !seenScenarios.has(s.id));
+  const pool = unseen.length >= count ? unseen : allScenarios;
+  
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 export default function ConfirmationTest({ profile, setProfile }: Props) {
+  const [scenarios] = useState(() => getUnseenScenarios(profile, 5));
   const [step, setStep] = useState(0);
   const [selectedEvidence, setSelectedEvidence] = useState<Set<number>>(new Set());
   const [finished, setFinished] = useState(false);
@@ -76,13 +177,14 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
     if (step === scenarios.length - 1) {
       setFinished(true);
       const score = newResults.filter(r => !r.biased).length;
+      const seenIds = scenarios.map(s => s.id);
       const result = {
         id: Date.now().toString(),
         testType: 'confirmation',
         date: new Date().toISOString(),
         score,
         maxScore: scenarios.length,
-        details: { results: newResults },
+        details: { results: newResults, seenIds },
       };
       setProfile(addTestResult(profile, result));
     } else {
@@ -96,7 +198,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
     
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Confirmation Bias</h1>
+        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Склонность к подтверждению</h1>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
@@ -122,7 +224,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-purple-800 mb-2">Как это работает</h3>
               <p className="text-sm text-purple-700 mb-2">
-                Confirmation bias (склонность к подтверждению) — наш мозг автоматически ищет информацию, 
+                Склонность к подтверждению (confirmation bias) — наш мозг автоматически ищет информацию, 
                 подтверждающую уже существующее убеждение. Это не глупость — это экономия энергии. 
                 Но в сложном мире это приводит к систематическим ошибкам.
               </p>
@@ -138,7 +240,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
         <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
           <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
           <p className="text-sm text-stone-600 mb-2">
-            Термин «confirmation bias» ввёл английский психолог <strong>Питер Уэйсон</strong> в 1960 году 
+            Термин «confirmation bias» (склонность к подтверждению) ввёл английский психолог <strong>Питер Уэйсон</strong> в 1960 году 
             в своём классическом эксперименте «2-4-6». Участники должны были угадать правило, по которому 
             построена тройка чисел. Уэйсон обнаружил, что люди тестируют только те гипотезы, которые 
             подтверждают их предположения, игнорируя опровергающие.
@@ -168,7 +270,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Confirmation Bias</h1>
+        <h1 className="text-xl font-bold text-stone-800">Склонность к подтверждению</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

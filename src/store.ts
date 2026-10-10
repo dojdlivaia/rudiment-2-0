@@ -107,6 +107,7 @@ function calculateBiasScores(profile: UserProfile): Record<string, number> {
     anchoring: 'anchoring',
     confirmation: 'confirmation',
     hindsight: 'hindsight',
+    calibration: 'anchoring', // Калибровка влияет на общую точность
     statistical: 'baseRate',
     planning: 'planning',
     illusion: 'perception',

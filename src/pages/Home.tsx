@@ -82,15 +82,15 @@ export default function HomePage({ profile }: Props) {
           />
           <TestCard
             icon={<Shield size={24} />}
-            title="Confirmation Bias"
+            title="Склонность к подтверждению"
             description="Мы ищем подтверждения тому, во что уже верим, и игнорируем противоречия."
             color="bg-purple-50 text-purple-700 border-purple-200"
             link="/test/confirmation"
           />
           <TestCard
             icon={<Eye size={24} />}
-            title="Hindsight Bias"
-            description="«Я так и знал!» — после того, как узнал результат, кажется, что предсказал бы."
+            title="Эффект «я так и знал!»"
+            description="После того, как узнал результат, кажется, что предсказал бы."
             color="bg-amber-50 text-amber-700 border-amber-200"
             link="/test/hindsight"
           />

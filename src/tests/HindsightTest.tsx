@@ -8,7 +8,7 @@ interface Props {
   setProfile: (p: UserProfile) => void;
 }
 
-const scenarios = [
+const allScenarios = [
   {
     id: 1,
     event: 'Компания А выпустила новый смартфон',
@@ -29,9 +29,66 @@ const scenarios = [
     event: 'Учёные объявили о новой вакцине',
     outcome: 'Вакцина показала эффективность 95%',
   },
+  {
+    id: 5,
+    event: 'Политик обещал снизить налоги',
+    outcome: 'Налоги выросли через год после выборов',
+  },
+  {
+    id: 6,
+    event: 'Фильм получил 10 номинаций на Оскар',
+    outcome: 'Фильм не получил ни одной награды',
+  },
+  {
+    id: 7,
+    event: 'Компания Г запустила новую соцсеть',
+    outcome: 'Через полгода соцсеть закрылась из-за отсутствия пользователей',
+  },
+  {
+    id: 8,
+    event: 'Спортсмен установил мировой рекорд',
+    outcome: 'На следующих соревнованиях он показал результат на 15% хуже',
+  },
+  {
+    id: 9,
+    event: 'Ресторан открылся в центре города с новым меню',
+    outcome: 'Ресторан закрылся через 3 месяца из-за отсутствия клиентов',
+  },
+  {
+    id: 10,
+    event: 'Учёные предсказали мощное землетрясение',
+    outcome: 'Землетрясение произошло точно в предсказанное время и месте',
+  },
+  {
+    id: 11,
+    event: 'Книга стала бестселлером в первую неделю',
+    outcome: 'Через месяц книга исчезла из списков бестселлеров',
+  },
+  {
+    id: 12,
+    event: 'Город построил новую станцию метро',
+    outcome: 'Станция оказалась невостребованной — пассажиропоток в 5 раз ниже прогноза',
+  },
 ];
 
+// Функция для получения сценариев, которые пользователь ещё не видел
+function getUnseenScenarios(profile: UserProfile, count: number) {
+  const seenScenarios = new Set<number>();
+  profile.testResults.forEach(result => {
+    if (result.testType === 'hindsight' && result.details.seenIds) {
+      result.details.seenIds.forEach((id: number) => seenScenarios.add(id));
+    }
+  });
+
+  const unseen = allScenarios.filter(s => !seenScenarios.has(s.id));
+  const pool = unseen.length >= count ? unseen : allScenarios;
+  
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 export default function HindsightTest({ profile, setProfile }: Props) {
+  const [scenarios] = useState(() => getUnseenScenarios(profile, 6));
   const [step, setStep] = useState(0);
   const [ratings, setRatings] = useState<number[]>([]);
   const [finished, setFinished] = useState(false);
@@ -48,13 +105,14 @@ export default function HindsightTest({ profile, setProfile }: Props) {
       const biasScore = Math.min(100, Math.max(0, (avg - 1) / 6 * 100));
       const score = Math.round((1 - biasScore / 100) * scenarios.length);
       
+      const seenIds = scenarios.map(s => s.id);
       const result = {
         id: Date.now().toString(),
         testType: 'hindsight',
         date: new Date().toISOString(),
         score,
         maxScore: scenarios.length,
-        details: { ratings: newRatings, average: avg },
+        details: { ratings: newRatings, average: avg, seenIds },
       };
       setProfile(addTestResult(profile, result));
     } else {
@@ -68,7 +126,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
     
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Hindsight Bias</h1>
+        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Эффект «я так и знал!»</h1>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
@@ -96,7 +154,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-amber-800 mb-2">Как это работает</h3>
               <p className="text-sm text-amber-700 mb-2">
-                Hindsight bias — «я так и знал!» После того как мы узнали результат, 
+                Hindsight bias (ошибка выжившего, «эффект «я так и знал!») — после того как мы узнали результат, 
                 наш мозг перестраивает память, делая событие более «предсказуемым», 
                 чем оно было на самом деле.
               </p>
@@ -115,10 +173,10 @@ export default function HindsightTest({ profile, setProfile }: Props) {
         <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
           <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
           <p className="text-sm text-stone-600 mb-2">
-            Hindsight bias (ошибка выжившего, «эффект «я так и знал!») был исследован <strong>Барухом Фишхоффом</strong> 
-            в 1975 году. В своём классическом эксперименте он давал участникам описание исторических событий 
-            (например, войны между гуронами и британцами) и просил оценить вероятность различных исходов. 
-            После того как участники узнавали реальный исход, они задним числом оценивали его как гораздо более вероятный.
+            Hindsight bias был исследован <strong>Барухом Фишхоффом</strong> в 1975 году. 
+            В своём классическом эксперименте он давал участникам описание исторических событий 
+            и просил оценить вероятность различных исходов. После того как участники узнавали реальный исход, 
+            они задним числом оценивали его как гораздо более вероятный.
           </p>
           <p className="text-sm text-stone-600">
             Этот эффект особенно опасен в медицине и юриспруденции, где задним числом ошибки кажутся «очевидными», 
@@ -145,7 +203,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Hindsight Bias</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эффект «я так и знал!»</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

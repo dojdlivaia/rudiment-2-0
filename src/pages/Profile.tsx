@@ -7,10 +7,10 @@ interface Props {
 }
 
 const biasLabels: Record<string, string> = {
-  anchoring: 'Якорь',
-  confirmation: 'Подтверждение',
-  hindsight: 'Ретроспектива',
-  baseRate: 'Базовый шанс',
+  anchoring: 'Эффект якоря',
+  confirmation: 'Склонность к подтверждению',
+  hindsight: 'Эффект «я так и знал!»',
+  baseRate: 'Игнорирование базовой вероятности',
   planning: 'Планирование',
   perception: 'Восприятие',
 };

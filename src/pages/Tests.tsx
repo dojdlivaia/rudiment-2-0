@@ -42,7 +42,7 @@ const tests = [
     title: 'Калибровка уверенности',
     description: 'Насколько точна твоя самооценка знаний',
     duration: '5 мин',
-    color: 'bg-raptor-50 border-raptor-200 text-raptor-700',
+    color: 'bg-green-50 border-green-200 text-green-700',
   },
   {
     id: 'statistical',
@@ -106,7 +106,7 @@ export default function TestsPage({ profile }: Props) {
                 </div>
                 <p className="text-sm text-stone-500 truncate">{test.description}</p>
                 {results.length > 0 && (
-                  <p className="text-xs text-raptor-600 mt-1">
+                  <p className="text-xs text-green-600 mt-1">
                     Пройден {results.length}× {lastScore !== null && `• последний: ${lastScore}`}
                   </p>
                 )}

@@ -109,7 +109,7 @@ export default function StatisticalTest({ profile, setProfile }: Props) {
           
           <div className="space-y-3">
             {questions.map((q, i) => (
-              <div key={i} className={`p-3 rounded-xl ${answers[i] === q.correct ? 'bg-raptor-50 border border-raptor-200' : 'bg-red-50 border border-red-200'}`}>
+              <div key={i} className={`p-3 rounded-xl ${answers[i] === q.correct ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                 <p className="text-sm font-medium text-stone-800">{q.title}</p>
                 <p className="text-xs text-stone-600 mt-1">
                   {answers[i] === q.correct ? '✓ Верно' : `✗ Ты: "${q.options[answers[i]]}" → Верно: "${q.options[q.correct]}"`}
@@ -142,7 +142,7 @@ export default function StatisticalTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -187,7 +187,7 @@ export default function StatisticalTest({ profile, setProfile }: Props) {
           </div>
         ) : (
           <div className="animate-fade-in">
-            <div className={`p-4 rounded-xl mb-4 ${answers[step] === currentQ.correct ? 'bg-raptor-50 border border-raptor-200' : 'bg-red-50 border border-red-200'}`}>
+            <div className={`p-4 rounded-xl mb-4 ${answers[step] === currentQ.correct ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
               <p className="font-medium text-sm mb-1">
                 {answers[step] === currentQ.correct ? '✓ Верно!' : '✗ Не совсем...'}
               </p>

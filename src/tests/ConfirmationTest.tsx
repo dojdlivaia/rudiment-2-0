@@ -20,7 +20,6 @@ const scenarios = [
       { text: 'Один знакомый похудел на 10 кг', supports: true },
       { text: 'Мета-анализ 50 исследований не нашёл эффекта', supports: false },
     ],
-    correctChoice: 'search', // 'search' = ищешь подтверждения, 'challenge' = проверяешь критически
   },
   {
     id: 2,
@@ -33,7 +32,6 @@ const scenarios = [
       { text: 'Другой эксперт указывает на скрытые издержки', supports: false },
       { text: 'Опрос показывает, что 60% людей довольны', supports: true },
     ],
-    correctChoice: 'challenge',
   },
   {
     id: 3,
@@ -46,14 +44,12 @@ const scenarios = [
       { text: 'Конкурент теряет долю рынка, но и у X она падает', supports: false },
       { text: 'Инсайдеры продают акции', supports: false },
     ],
-    correctChoice: 'challenge',
   },
 ];
 
 export default function ConfirmationTest({ profile, setProfile }: Props) {
   const [step, setStep] = useState(0);
   const [selectedEvidence, setSelectedEvidence] = useState<Set<number>>(new Set());
-  const [behavior, setBehavior] = useState<'search' | 'challenge' | null>(null);
   const [finished, setFinished] = useState(false);
   const [results, setResults] = useState<{ scenario: number; biased: boolean }[]>([]);
 
@@ -66,9 +62,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
     setSelectedEvidence(newSet);
   };
 
-  const handleBehaviorChoice = (choice: 'search' | 'challenge') => {
-    setBehavior(choice);
-    
+  const handleContinue = () => {
     // Check if user selected mostly confirming evidence
     const supportingCount = Array.from(selectedEvidence).filter(idx => 
       currentScenario.evidence[idx].supports
@@ -92,11 +86,8 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
       };
       setProfile(addTestResult(profile, result));
     } else {
-      setTimeout(() => {
-        setStep(step + 1);
-        setSelectedEvidence(new Set());
-        setBehavior(null);
-      }, 2000);
+      setStep(step + 1);
+      setSelectedEvidence(new Set());
     }
   };
 
@@ -116,7 +107,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
           <div className="space-y-3">
             {scenarios.map((s, i) => (
               <div key={i} className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
-                <span className={results[i]?.biased ? 'text-red-500' : 'text-raptor-600'}>
+                <span className={results[i]?.biased ? 'text-red-500' : 'text-green-600'}>
                   {results[i]?.biased ? '🦖' : '✓'}
                 </span>
                 <span className="text-sm text-stone-700">{s.title}</span>
@@ -148,7 +139,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -196,24 +187,13 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
           ))}
         </div>
 
-        {selectedEvidence.size > 0 && !behavior && (
-          <div className="animate-fade-in">
-            <p className="text-sm text-stone-500 mb-3">Как ты действуешь с этой информацией?</p>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => handleBehaviorChoice('search')}
-                className="p-3 rounded-xl border border-stone-200 hover:bg-stone-50 text-sm text-stone-700 transition-colors"
-              >
-                🔍 Ищу ещё подтверждения
-              </button>
-              <button
-                onClick={() => handleBehaviorChoice('challenge')}
-                className="p-3 rounded-xl border border-stone-200 hover:bg-stone-50 text-sm text-stone-700 transition-colors"
-              >
-                🤔 Проверяю критически
-              </button>
-            </div>
-          </div>
+        {selectedEvidence.size > 0 && (
+          <button
+            onClick={handleContinue}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-xl font-medium transition-colors"
+          >
+            {step === scenarios.length - 1 ? 'Завершить' : 'Дальше'}
+          </button>
         )}
       </div>
     </div>

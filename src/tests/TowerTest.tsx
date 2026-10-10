@@ -39,7 +39,6 @@ export default function TowerTest({ profile, setProfile }: Props) {
     if (finished) return;
 
     if (selectedPeg === null) {
-      // Select peg (only if it has disks)
       if (pegs[pegIdx].length > 0) {
         setSelectedPeg(pegIdx);
       }
@@ -48,13 +47,11 @@ export default function TowerTest({ profile, setProfile }: Props) {
         setSelectedPeg(null);
         return;
       }
-      // Try to move
       const fromPeg = pegs[selectedPeg];
       const toPeg = pegs[pegIdx];
       const disk = fromPeg[fromPeg.length - 1];
 
       if (toPeg.length === 0 || toPeg[toPeg.length - 1] > disk) {
-        // Valid move
         const newPegs = pegs.map(p => [...p]);
         newPegs[selectedPeg] = fromPeg.slice(0, -1);
         newPegs[pegIdx] = [...toPeg, disk];
@@ -62,10 +59,8 @@ export default function TowerTest({ profile, setProfile }: Props) {
         setMoves(moves + 1);
         setSelectedPeg(null);
 
-        // Check win
         if (newPegs[2].length === diskCount) {
           setFinished(true);
-          // Score: based on efficiency
           const efficiency = minMoves / moves;
           const score = Math.round(Math.min(1, efficiency) * diskCount);
           
@@ -190,7 +185,7 @@ export default function TowerTest({ profile, setProfile }: Props) {
           >
             Ещё раз
           </button>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -227,10 +222,8 @@ export default function TowerTest({ profile, setProfile }: Props) {
               className={`relative flex flex-col-reverse items-center p-2 min-h-[200px] rounded-xl border-2 transition-all
                 ${selectedPeg === pegIdx ? 'border-indigo-400 bg-indigo-50' : 'border-stone-200 hover:border-stone-300'}`}
             >
-              {/* Peg base */}
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-2 bg-stone-300 rounded" />
               
-              {/* Disks */}
               {peg.map((disk, diskIdx) => (
                 <div
                   key={diskIdx}
@@ -244,7 +237,6 @@ export default function TowerTest({ profile, setProfile }: Props) {
                 />
               ))}
 
-              {/* Peg label */}
               <div className="absolute top-1 text-xs text-stone-400">
                 {['A', 'B', 'C'][pegIdx]}
               </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserProfile, addTestResult } from '../store';
-import { ArrowLeft, CheckCircle, Info } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 
 interface Props {
   profile: UserProfile;
@@ -65,38 +65,24 @@ export default function AnchorTest({ profile, setProfile }: Props) {
 
     if (isLast) {
       setFinished(true);
-      // Calculate score
-      let score = 0;
-      const maxScore = questions.length;
-      const details: Record<string, any> = {};
-      
-      questions.forEach((q, i) => {
-        const answer = newAnswers[i] || 0;
-        const anchorInfluence = Math.abs(answer - q.anchor) < Math.abs(q.correctAnswer - q.anchor) * 0.5;
-        const correct = Math.abs(answer - q.correctAnswer) <= q.tolerance;
-        if (correct) score++;
-        details[`q${i}`] = { answer, anchor: q.anchor, correct, anchorInfluence };
-      });
-
-      // Score based on resistance to anchoring
+      // Calculate score based on resistance to anchoring
       const anchoringResistance = questions.reduce((acc, q, i) => {
         const answer = newAnswers[i] || 0;
         const distanceFromAnchor = Math.abs(answer - q.anchor);
         const distanceFromCorrect = Math.abs(answer - q.correctAnswer);
-        // If answer is closer to anchor than to correct, that's anchoring
         if (distanceFromAnchor < distanceFromCorrect) return acc;
         return acc + 1;
       }, 0);
 
-      const finalScore = Math.round((anchoringResistance / questions.length) * maxScore);
+      const finalScore = Math.round((anchoringResistance / questions.length) * questions.length);
       
       const result = {
         id: Date.now().toString(),
         testType: 'anchoring',
         date: new Date().toISOString(),
         score: finalScore,
-        maxScore,
-        details,
+        maxScore: questions.length,
+        details: { answers: newAnswers },
       };
       
       setProfile(addTestResult(profile, result));
@@ -107,8 +93,6 @@ export default function AnchorTest({ profile, setProfile }: Props) {
   };
 
   if (finished) {
-    const details = profile.testResults[profile.testResults.length - 1]?.details || {};
-    
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
         <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Эффект якоря</h1>
@@ -129,7 +113,7 @@ export default function AnchorTest({ profile, setProfile }: Props) {
                     <span className="text-stone-500">Якорь: <strong>{q.anchor}</strong></span>
                     <span className="text-stone-500">Твой ответ: <strong>{answer}</strong></span>
                     <span className="text-stone-500">Правильно: <strong>{q.correctAnswer}</strong></span>
-                    <span className={wasAnchored ? 'text-red-500' : 'text-raptor-600'}>
+                    <span className={wasAnchored ? 'text-red-500' : 'text-green-600'}>
                       {wasAnchored ? '🦖 Раптор потянул к якорю' : '✓ Устоял'}
                     </span>
                   </div>
@@ -139,17 +123,17 @@ export default function AnchorTest({ profile, setProfile }: Props) {
           </div>
         </div>
 
-        <div className="bg-raptor-50 rounded-2xl border border-raptor-200 p-6 mb-6">
+        <div className="bg-green-50 rounded-2xl border border-green-200 p-6 mb-6">
           <div className="flex items-start gap-3">
-            <Info size={20} className="text-raptor-600 mt-0.5 flex-shrink-0" />
+            <Info size={20} className="text-green-600 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-raptor-800 mb-2">Как это работает</h3>
-              <p className="text-sm text-raptor-700 mb-2">
+              <h3 className="font-semibold text-green-800 mb-2">Как это работает</h3>
+              <p className="text-sm text-green-700 mb-2">
                 Эффект якоря — одна из самых мощных когнитивных ловушек. Даже зная о нём, 
                 мы не можем полностью отключить его. Первое число, которое мы видим, 
                 становится «якорем» — точкой отсчёта, от которой трудно уйти.
               </p>
-              <p className="text-sm text-raptor-700">
+              <p className="text-sm text-green-700">
                 <strong>Совет:</strong> Перед оценкой попробуй сформулировать «нулевую гипотезу» — 
                 что бы ты ответил, не видя первого числа. Это снижает эффект якоря.
               </p>
@@ -161,7 +145,7 @@ export default function AnchorTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -180,30 +164,27 @@ export default function AnchorTest({ profile, setProfile }: Props) {
         <span className="text-sm text-stone-500">{step + 1} / {questions.length}</span>
       </div>
 
-      {/* Progress bar */}
       <div className="w-full bg-stone-200 rounded-full h-2 mb-8">
         <div
-          className="bg-raptor-500 h-2 rounded-full transition-all"
+          className="bg-green-500 h-2 rounded-full transition-all"
           style={{ width: `${((step + 1) / questions.length) * 100}%` }}
         />
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6">
-        {/* Anchor display */}
         {showAnchor && (
           <div className="text-center mb-6 animate-fade-in">
             <p className="text-sm text-stone-500 mb-2">Случайное число для тебя:</p>
             <div className="text-5xl font-bold text-stone-300">{currentQ.anchor}</div>
             <button
               onClick={() => setShowAnchor(false)}
-              className="mt-3 text-sm text-raptor-600 hover:text-raptor-700"
+              className="mt-3 text-sm text-green-600 hover:text-green-700"
             >
               Понятно, дальше →
             </button>
           </div>
         )}
 
-        {/* Question */}
         {!showAnchor && (
           <div className="animate-fade-in">
             <p className="text-lg font-medium text-stone-800 mb-6">{currentQ.question}</p>
@@ -213,13 +194,13 @@ export default function AnchorTest({ profile, setProfile }: Props) {
               onChange={e => setCurrentInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleNext()}
               placeholder="Твой ответ..."
-              className="w-full px-4 py-3 border border-stone-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-raptor-400 focus:border-transparent"
+              className="w-full px-4 py-3 border border-stone-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
               autoFocus
             />
             <button
               onClick={handleNext}
               disabled={currentInput === ''}
-              className="mt-4 w-full bg-raptor-600 hover:bg-raptor-700 disabled:bg-stone-300 text-white px-4 py-3 rounded-xl font-medium transition-colors"
+              className="mt-4 w-full bg-green-600 hover:bg-green-700 disabled:bg-stone-300 text-white px-4 py-3 rounded-xl font-medium transition-colors"
             >
               {isLast ? 'Завершить' : 'Дальше'}
             </button>

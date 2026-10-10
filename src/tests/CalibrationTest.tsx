@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { UserProfile, addCalibrationPoint, getCalibrationAccuracy } from '../store';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { UserProfile, addCalibrationPoint } from '../store';
 import { ArrowLeft, Info } from 'lucide-react';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 const questions = [
   { q: 'Столица Австралии?', options: ['Сидней', 'Мельбурн', 'Канберра', 'Брисбен'], correct: 2 },
   { q: 'Сколько костей в теле взрослого человека?', options: ['186', '206', '226', '256'], correct: 1 },
-  { q: 'В каком году пал Берлинская стена?', options: ['1987', '1989', '1991', '1985'], correct: 1 },
+  { q: 'В каком году пала Берлинская стена?', options: ['1987', '1989', '1991', '1985'], correct: 1 },
   { q: 'Какая планета самая большая в Солнечной системе?', options: ['Сатурн', 'Нептун', 'Юпитер', 'Уран'], correct: 2 },
   { q: 'Кто написал «Войну и мир»?', options: ['Достоевский', 'Чехов', 'Толстой', 'Тургенев'], correct: 2 },
   { q: 'Какой элемент имеет атомный номер 79?', options: ['Серебро', 'Золото', 'Платина', 'Медь'], correct: 1 },
@@ -33,7 +33,6 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
     const newAnswers = [...answers, { selected, confidence, correct }];
     setAnswers(newAnswers);
 
-    // Save calibration point
     const point = {
       confidence,
       correct,
@@ -75,7 +74,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
             <div className="text-xs text-stone-500 mt-1">Ср. уверенность</div>
           </div>
           <div className="bg-white rounded-xl border border-stone-200 p-4 text-center">
-            <div className={`text-2xl font-bold ${Math.abs(calibrationGap) < 15 ? 'text-raptor-600' : 'text-amber-600'}`}>
+            <div className={`text-2xl font-bold ${Math.abs(calibrationGap) < 15 ? 'text-green-600' : 'text-amber-600'}`}>
               {calibrationGap > 0 ? '+' : ''}{calibrationGap}%
             </div>
             <div className="text-xs text-stone-500 mt-1">Калибровка</div>
@@ -98,17 +97,17 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
           </div>
         </div>
 
-        <div className="bg-raptor-50 rounded-2xl border border-raptor-200 p-6 mb-6">
+        <div className="bg-green-50 rounded-2xl border border-green-200 p-6 mb-6">
           <div className="flex items-start gap-3">
-            <Info size={20} className="text-raptor-600 mt-0.5 flex-shrink-0" />
+            <Info size={20} className="text-green-600 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-raptor-800 mb-2">Что это значит</h3>
-              <p className="text-sm text-raptor-700 mb-2">
+              <h3 className="font-semibold text-green-800 mb-2">Что это значит</h3>
+              <p className="text-sm text-green-700 mb-2">
                 {calibrationGap > 15 && 'Ты склонен к сверхуверенности. Уверенность выше, чем реальная точность. Это типично для экспертов в знакомых областях.'}
                 {calibrationGap < -15 && 'Ты склонен к неуверенности. Твоя точность выше, чем ты думаешь. Это бывает у людей с синдромом самозванца.'}
                 {Math.abs(calibrationGap) <= 15 && 'Отличная калибровка! Твоя уверенность примерно соответствует реальности. Это редкий и ценный навык.'}
               </p>
-              <p className="text-sm text-raptor-700">
+              <p className="text-sm text-green-700">
                 <strong>Совет:</strong> Калибровка — тренируемый навык. После каждого решения 
                 спрашивай: «Насколько я уверен?» и потом проверяй. Со временем мозг учится точнее оценивать себя.
               </p>
@@ -120,7 +119,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -141,7 +140,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
 
       <div className="w-full bg-stone-200 rounded-full h-2 mb-8">
         <div
-          className="bg-raptor-500 h-2 rounded-full transition-all"
+          className="bg-green-500 h-2 rounded-full transition-all"
           style={{ width: `${((step + 1) / questions.length) * 100}%` }}
         />
       </div>
@@ -154,7 +153,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
             <button
               key={idx}
               onClick={() => handleAnswer(idx)}
-              className="w-full text-left p-3 rounded-xl border border-stone-200 hover:border-raptor-300 hover:bg-raptor-50 
+              className="w-full text-left p-3 rounded-xl border border-stone-200 hover:border-green-300 hover:bg-green-50 
                          text-stone-700 transition-all"
             >
               {opt}
@@ -171,7 +170,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
               max="100"
               value={confidence}
               onChange={e => setConfidence(Number(e.target.value))}
-              className="flex-1 accent-raptor-500"
+              className="flex-1 accent-green-500"
             />
             <span className="text-lg font-bold text-stone-700 w-12 text-right">{confidence}%</span>
           </div>

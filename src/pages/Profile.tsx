@@ -1,6 +1,6 @@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { UserProfile, getCalibrationAccuracy } from '../store';
-import { Award, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Award, AlertTriangle, CheckCircle } from 'lucide-react';
 
 interface Props {
   profile: UserProfile;
@@ -74,7 +74,7 @@ export default function ProfilePage({ profile }: Props) {
           <div className="text-6xl mb-4">🧠</div>
           <h1 className="text-2xl font-bold text-stone-800 mb-2">Профиль пока пуст</h1>
           <p className="text-stone-500 mb-6">Пройди хотя бы пару тестов, чтобы увидеть свой когнитивный профиль</p>
-          <a href="/tests" className="inline-flex items-center gap-2 bg-raptor-600 text-white px-6 py-3 rounded-xl font-semibold">
+          <a href="#/tests" className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold">
             К тестам
           </a>
         </div>
@@ -129,22 +129,22 @@ export default function ProfilePage({ profile }: Props) {
 
       {/* Strengths & Weaknesses */}
       <div className="grid md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-raptor-50 rounded-2xl border border-raptor-200 p-5">
+        <div className="bg-green-50 rounded-2xl border border-green-200 p-5">
           <div className="flex items-center gap-2 mb-3">
-            <Award size={20} className="text-raptor-600" />
-            <h3 className="font-semibold text-raptor-800">Сильные стороны</h3>
+            <Award size={20} className="text-green-600" />
+            <h3 className="font-semibold text-green-800">Сильные стороны</h3>
           </div>
           {strengths.length > 0 ? (
             <ul className="space-y-2">
               {strengths.map(([key, val]) => (
                 <li key={key} className="flex items-center justify-between">
-                  <span className="text-sm text-raptor-700">{biasLabels[key]}</span>
-                  <span className="text-sm font-medium text-raptor-600">{val}/100</span>
+                  <span className="text-sm text-green-700">{biasLabels[key]}</span>
+                  <span className="text-sm font-medium text-green-600">{val}/100</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-raptor-600">Пройди больше тестов</p>
+            <p className="text-sm text-green-600">Пройди больше тестов</p>
           )}
         </div>
 
@@ -172,7 +172,7 @@ export default function ProfilePage({ profile }: Props) {
       {weaknesses.length > 0 && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <CheckCircle size={20} className="text-raptor-600" />
+            <CheckCircle size={20} className="text-green-600" />
             <h2 className="text-lg font-semibold text-stone-800">Рекомендации</h2>
           </div>
           <div className="space-y-4">

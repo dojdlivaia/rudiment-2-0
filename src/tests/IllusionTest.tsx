@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserProfile, addTestResult } from '../store';
-import { ArrowLeft, Info, Eye } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 
 interface Props {
   profile: UserProfile;
@@ -15,14 +15,11 @@ const illusions = [
     description: 'Какая линия длиннее?',
     render: () => (
       <svg viewBox="0 0 300 150" className="w-full max-w-sm mx-auto">
-        {/* Line 1 with outward arrows */}
         <line x1="50" y1="50" x2="250" y2="50" stroke="#1c1917" strokeWidth="3" />
         <line x1="50" y1="50" x2="70" y2="35" stroke="#1c1917" strokeWidth="3" />
         <line x1="50" y1="50" x2="70" y2="65" stroke="#1c1917" strokeWidth="3" />
         <line x1="250" y1="50" x2="230" y2="35" stroke="#1c1917" strokeWidth="3" />
         <line x1="250" y1="50" x2="230" y2="65" stroke="#1c1917" strokeWidth="3" />
-        
-        {/* Line 2 with inward arrows */}
         <line x1="50" y1="110" x2="250" y2="110" stroke="#1c1917" strokeWidth="3" />
         <line x1="50" y1="110" x2="70" y2="95" stroke="#1c1917" strokeWidth="3" />
         <line x1="50" y1="110" x2="70" y2="125" stroke="#1c1917" strokeWidth="3" />
@@ -36,18 +33,15 @@ const illusions = [
   },
   {
     id: 2,
-    title: 'Иллюза размера (Эббингауза)',
+    title: 'Иллюзия размера (Эббингауза)',
     description: 'Какой центральный круг больше?',
     render: () => (
       <svg viewBox="0 0 300 150" className="w-full max-w-sm mx-auto">
-        {/* Left: small center surrounded by large circles */}
         <circle cx="100" cy="75" r="20" fill="#f97316" />
         <circle cx="60" cy="45" r="30" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
         <circle cx="140" cy="45" r="30" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
         <circle cx="60" cy="105" r="30" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
         <circle cx="140" cy="105" r="30" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
-        
-        {/* Right: same size center surrounded by small circles */}
         <circle cx="220" cy="75" r="20" fill="#f97316" />
         <circle cx="195" cy="55" r="10" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
         <circle cx="245" cy="55" r="10" fill="#e7e5e4" stroke="#d6d3d1" strokeWidth="1" />
@@ -63,11 +57,10 @@ const illusions = [
   },
   {
     id: 3,
-    title: 'Иллюзия цвета',
-    description: 'Какого цвета тень на квадрате А и Б?',
+    title: 'Иллюзия тени',
+    description: 'Какого цвета квадраты A и Б?',
     render: () => (
       <svg viewBox="0 0 300 200" className="w-full max-w-sm mx-auto">
-        {/* Green checkerboard */}
         <rect x="20" y="20" width="260" height="160" fill="#4ade80" />
         <rect x="20" y="20" width="65" height="40" fill="#16a34a" />
         <rect x="150" y="20" width="65" height="40" fill="#16a34a" />
@@ -76,16 +69,10 @@ const illusions = [
         <rect x="20" y="100" width="65" height="40" fill="#16a34a" />
         <rect x="150" y="100" width="65" height="40" fill="#16a34a" />
         <rect x="85" y="140" width="65" height="40" fill="#16a34a" />
-        
-        {/* Shadow cylinder */}
         <ellipse cx="180" cy="80" rx="45" ry="20" fill="#57534e" opacity="0.4" />
         <rect x="135" y="40" width="90" height="40" fill="#57534e" opacity="0.3" />
-        
-        {/* Square A (in shadow) */}
         <rect x="150" y="100" width="30" height="30" fill="#57534e" />
         <text x="165" y="120" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">A</text>
-        
-        {/* Square B (in light) */}
         <rect x="215" y="60" width="30" height="30" fill="#86efac" />
         <text x="230" y="80" textAnchor="middle" fill="#166534" fontSize="12" fontWeight="bold">Б</text>
       </svg>
@@ -96,11 +83,11 @@ const illusions = [
   },
   {
     id: 4,
-    title: 'Движущееся изображение',
-    description: 'Смотри на центр креста 10 секунд. Что происходит с цветными точками?',
+    title: 'Адаптация цвета',
+    description: 'Смотри на центральный крест 10 секунд. Что происходит с цветными точками?',
     render: () => (
       <div className="relative w-full max-w-sm mx-auto h-48 bg-stone-100 rounded-xl overflow-hidden flex items-center justify-center">
-        <div className="text-4xl">✚</div>
+        <div className="text-4xl text-stone-400">✚</div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-40 h-40">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => (
@@ -128,7 +115,7 @@ const illusions = [
       'Всё неподвижно',
     ],
     correct: 1,
-    explanation: 'Это иллюзия «исчезающей» точки. Когда ты фиксируешь взгляд на кресте, периферическое зрение адаптируется к оранжевым точкам (нейронная адаптация), и они «исчезают». Но зелёная точка — новая, и мозг её «ловит». Создаётся иллюзия бегущей зелёной точки. Это демонстрирует, как адаптация нейронов влияет на восприятие.',
+    explanation: 'Это иллюзия «исчезающей» точки. Когда ты фиксируешь взгляд на кресте, периферическое зрение адаптируется к оранжевым точкам (нейронная адаптация), и они «исчезают». Но зелёная точка — новая, и мозг её «ловит». Создаётся иллюзия бегущей зелёной точки.',
   },
 ];
 
@@ -204,7 +191,7 @@ export default function IllusionTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -253,7 +240,7 @@ export default function IllusionTest({ profile, setProfile }: Props) {
           </div>
         ) : (
           <div className="animate-fade-in">
-            <div className={`p-4 rounded-xl mb-4 ${answers[step] === currentIllusion.correct ? 'bg-raptor-50 border border-raptor-200' : 'bg-red-50 border border-red-200'}`}>
+            <div className={`p-4 rounded-xl mb-4 ${answers[step] === currentIllusion.correct ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
               <p className="font-medium text-sm mb-2">
                 {answers[step] === currentIllusion.correct ? '✓ Верно!' : '✗ Не совсем...'}
               </p>

@@ -13,29 +13,21 @@ const scenarios = [
     id: 1,
     event: 'Компания А выпустила новый смартфон',
     outcome: 'Смартфон провалился на рынке — продажи на 70% ниже прогноза',
-    question: 'Насколько предсказуемым тебе кажется этот результат СЕЙЧАС?',
-    scale: '1 = полная неожиданность, 7 = совершенно очевидно',
   },
   {
     id: 2,
     event: 'Сборная Б вышла в финал чемпионата',
     outcome: 'Сборная Б проиграла финал со счётом 1:4',
-    question: 'Насколько предсказуемым тебе кажется этот результат СЕЙЧАС?',
-    scale: '1 = полная неожиданность, 7 = совершенно очевидно',
   },
   {
     id: 3,
     event: 'Стартап В получил инвестиции $10M',
     outcome: 'Через год стартап В закрылся',
-    question: 'Насколько предсказуемым тебе кажется этот результат СЕЙЧАС?',
-    scale: '1 = полная неожиданность, 7 = совершенно очевидно',
   },
   {
     id: 4,
     event: 'Учёные объявили о новой вакцине',
     outcome: 'Вакцина показала эффективность 95%',
-    question: 'Насколько предсказуемым тебе кажется этот результат СЕЙЧАС?',
-    scale: '1 = полная неожиданность, 7 = совершенно очевидно',
   },
 ];
 
@@ -52,8 +44,6 @@ export default function HindsightTest({ profile, setProfile }: Props) {
 
     if (step === scenarios.length - 1) {
       setFinished(true);
-      // Hindsight bias: average rating > 4 indicates bias
-      // Lower average = less biased (recognizing unpredictability)
       const avg = newRatings.reduce((a, b) => a + b, 0) / newRatings.length;
       const biasScore = Math.min(100, Math.max(0, (avg - 1) / 6 * 100));
       const score = Math.round((1 - biasScore / 100) * scenarios.length);
@@ -84,7 +74,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
           <div className="text-center mb-4">
             <div className="text-4xl font-bold text-stone-800">{avg.toFixed(1)}</div>
             <p className="text-stone-500 mt-1">средняя «предсказуемость» (из 7)</p>
-            <p className={`text-sm mt-2 font-medium ${avg > 5 ? 'text-red-500' : avg > 3.5 ? 'text-amber-500' : 'text-raptor-600'}`}>
+            <p className={`text-sm mt-2 font-medium ${avg > 5 ? 'text-red-500' : avg > 3.5 ? 'text-amber-500' : 'text-green-600'}`}>
               Уровень hindsight bias: {biasLevel}
             </p>
           </div>
@@ -126,7 +116,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам
           </Link>
-          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+          <Link to="/profile" className="flex-1 text-center bg-green-600 text-white px-4 py-3 rounded-xl font-medium">
             Мой профиль
           </Link>
         </div>
@@ -163,8 +153,8 @@ export default function HindsightTest({ profile, setProfile }: Props) {
           <p className="text-stone-800 font-medium">{currentScenario.outcome}</p>
         </div>
 
-        <p className="text-stone-700 mb-2">{currentScenario.question}</p>
-        <p className="text-xs text-stone-400 mb-4">{currentScenario.scale}</p>
+        <p className="text-stone-700 mb-2">Насколько предсказуемым тебе кажется этот результат СЕЙЧАС?</p>
+        <p className="text-xs text-stone-400 mb-4">1 = полная неожиданность, 7 = совершенно очевидно</p>
 
         <div className="grid grid-cols-7 gap-2">
           {[1, 2, 3, 4, 5, 6, 7].map(n => (

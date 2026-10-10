@@ -1,23 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --color-raptor-50: #f0fdf4;
-  --color-raptor-100: #dcfce7;
-  --color-raptor-200: #bbf7d0;
-  --color-raptor-300: #86efac;
-  --color-raptor-400: #4ade80;
-  --color-raptor-500: #22c55e;
-  --color-raptor-600: #16a34a;
-  --color-raptor-700: #15803d;
-  --color-raptor-800: #166534;
-  --color-raptor-900: #14532d;
-  --color-amber-warm: #f59e0b;
-  --color-coral: #f97316;
-  --color-deep: #1e1b4b;
-  --color-surface: #fafaf9;
-  --color-surface-dark: #1c1917;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -29,6 +11,7 @@ html {
 body {
   background: linear-gradient(135deg, #fafaf9 0%, #f0fdf4 50%, #fefce8 100%);
   min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 @keyframes fadeIn {

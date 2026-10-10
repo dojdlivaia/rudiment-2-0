@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { UserProfile, getCalibrationAccuracy } from '../store';
-import { Flame, TrendingUp, Calendar } from 'lucide-react';
+import { TrendingUp, Calendar } from 'lucide-react';
 
 interface Props {
   profile: UserProfile;
@@ -27,7 +27,7 @@ export default function ProgressPage({ profile }: Props) {
   const calibrationData = getCalibrationAccuracy(profile.calibrationData);
 
   // Bias progress over time
-  const biasTimeline: Record<string, { date: string; [key: string]: any }[]> = {};
+  const biasTimeline: Record<string, { date: string; score: number }[]> = {};
   
   const typeMap: Record<string, string> = {
     anchoring: 'anchoring',
@@ -73,7 +73,7 @@ export default function ProgressPage({ profile }: Props) {
           <div className="text-6xl mb-4">📊</div>
           <h1 className="text-2xl font-bold text-stone-800 mb-2">Пока нет данных</h1>
           <p className="text-stone-500 mb-6">Пройди тесты, чтобы увидеть динамику</p>
-          <a href="/tests" className="inline-flex items-center gap-2 bg-raptor-600 text-white px-6 py-3 rounded-xl font-semibold">
+          <a href="#/tests" className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold">
             К тестам
           </a>
         </div>
@@ -101,7 +101,7 @@ export default function ProgressPage({ profile }: Props) {
       {timelineData.length > 1 && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={20} className="text-raptor-600" />
+            <TrendingUp size={20} className="text-green-600" />
             <h2 className="text-lg font-semibold text-stone-800">Общая динамика</h2>
           </div>
           <div className="h-56">
@@ -121,7 +121,7 @@ export default function ProgressPage({ profile }: Props) {
       {/* Per-bias progress */}
       <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <Calendar size={20} className="text-raptor-600" />
+          <Calendar size={20} className="text-green-600" />
           <h2 className="text-lg font-semibold text-stone-800">Прогресс по искажениям</h2>
         </div>
         <div className="space-y-4">
@@ -156,10 +156,7 @@ export default function ProgressPage({ profile }: Props) {
       {/* Calibration progress */}
       {calibrationData.length > 0 && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Flame size={20} className="text-amber-500" />
-            <h2 className="text-lg font-semibold text-stone-800">Калибровка неделя к неделе</h2>
-          </div>
+          <h2 className="text-lg font-semibold text-stone-800 mb-4">Калибровка неделя к неделе</h2>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={calibrationData}>

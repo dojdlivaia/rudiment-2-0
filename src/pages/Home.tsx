@@ -14,13 +14,13 @@ export default function HomePage({ profile }: Props) {
     <div className="max-w-6xl mx-auto px-4 py-8 animate-fade-in">
       {/* Hero */}
       <section className="text-center py-12 md:py-20">
-        <div className="inline-flex items-center gap-2 bg-raptor-100 text-raptor-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+        <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
           <span className="animate-pulse-soft">🦖</span>
           <span>Когнитивные искажения и метапознание</span>
         </div>
         
         <h1 className="text-4xl md:text-6xl font-extrabold text-stone-900 mb-4 leading-tight">
-          Рудимент <span className="text-raptor-600">2.0</span>
+          Рудимент <span className="text-green-600">2.0</span>
         </h1>
         
         <p className="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto mb-4">
@@ -34,7 +34,7 @@ export default function HomePage({ profile }: Props) {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             to="/tests"
-            className="inline-flex items-center justify-center gap-2 bg-raptor-600 hover:bg-raptor-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-raptor-200 hover:shadow-xl"
+            className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-green-200 hover:shadow-xl"
           >
             <Brain size={20} />
             Начать тесты
@@ -53,15 +53,15 @@ export default function HomePage({ profile }: Props) {
       {totalTests > 0 && (
         <section className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
           <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
-            <div className="text-3xl font-bold text-raptor-600">{totalTests}</div>
+            <div className="text-3xl font-bold text-green-600">{totalTests}</div>
             <div className="text-sm text-stone-500 mt-1">Тестов пройдено</div>
           </div>
           <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
-            <div className="text-3xl font-bold text-amber-warm">{streak} 🔥</div>
+            <div className="text-3xl font-bold text-amber-500">{streak} 🔥</div>
             <div className="text-sm text-stone-500 mt-1">Дней подряд</div>
           </div>
           <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center col-span-2 md:col-span-1">
-            <div className="text-3xl font-bold text-coral">
+            <div className="text-3xl font-bold text-orange-500">
               {Math.round(Object.values(profile.biasScores).reduce((a, b) => a + b, 0) / Math.max(Object.values(profile.biasScores).filter(v => v > 0).length, 1))}
             </div>
             <div className="text-sm text-stone-500 mt-1">Средняя уязвимость</div>
@@ -98,7 +98,7 @@ export default function HomePage({ profile }: Props) {
             icon={<TrendingUp size={24} />}
             title="Калибровка уверенности"
             description="Насколько точна твоя самооценка? Уверенность vs правильность."
-            color="bg-raptor-50 text-raptor-700 border-raptor-200"
+            color="bg-green-50 text-green-700 border-green-200"
             link="/test/calibration"
           />
           <TestCard
@@ -119,7 +119,7 @@ export default function HomePage({ profile }: Props) {
       </section>
 
       {/* Philosophy */}
-      <section className="bg-gradient-to-br from-stone-50 to-raptor-50 rounded-3xl p-8 md:p-12 border border-stone-200">
+      <section className="bg-gradient-to-br from-stone-50 to-green-50 rounded-3xl p-8 md:p-12 border border-stone-200">
         <h2 className="text-2xl font-bold text-stone-800 mb-4">Философия проекта</h2>
         <div className="grid md:grid-cols-2 gap-6 text-stone-600">
           <div>

@@ -12,7 +12,7 @@ const scenarios = [
   {
     id: 1,
     title: 'Новая диета',
-    setup: 'Ты читаешь статью о новой диете. Автор утверждает, что она помогла 90% людей.',
+    setup: 'Ты склоняешься к тому, что новая диета эффективна. Перед тобой несколько исследований. Какие из них ты бы прочитал подробнее?',
     evidence: [
       { text: 'Исследование на 15 людях показало потерю веса', supports: true },
       { text: '80% участников бросили диету через месяц', supports: false },
@@ -23,8 +23,8 @@ const scenarios = [
   },
   {
     id: 2,
-    title: 'Политическая новость',
-    setup: 'Ты веришь, что определённая политика полезна. Видишь новость, подтверждающую это.',
+    title: 'Политическая реформа',
+    setup: 'Ты считаешь, что определённая экономическая реформа полезна. Какие аргументы ты бы изучил внимательнее?',
     evidence: [
       { text: 'Статистика показывает рост экономики после реформы', supports: true },
       { text: 'Соседняя страна провела ту же реформу — результат хуже', supports: false },
@@ -36,7 +36,7 @@ const scenarios = [
   {
     id: 3,
     title: 'Инвестиционное решение',
-    setup: 'Ты считаешь, что акция компании X вырастет. Ищешь информацию.',
+    setup: 'Ты веришь, что акция компании X вырастет. Какие данные ты бы изучил подробнее?',
     evidence: [
       { text: 'Аналитик с хорошим треком рекомендует покупать', supports: true },
       { text: 'P/E компании выше среднего по отрасли', supports: false },
@@ -63,7 +63,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
   };
 
   const handleContinue = () => {
-    // Check if user selected mostly confirming evidence
+    // Проверяем, выбрал ли пользователь преимущественно подтверждающую информацию
     const supportingCount = Array.from(selectedEvidence).filter(idx => 
       currentScenario.evidence[idx].supports
     ).length;
@@ -122,8 +122,8 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-purple-800 mb-2">Как это работает</h3>
               <p className="text-sm text-purple-700 mb-2">
-                Confirmation bias — наш мозг автоматически ищет информацию, подтверждающую 
-                уже существующее убеждение. Это не глупость — это экономия энергии. 
+                Confirmation bias (склонность к подтверждению) — наш мозг автоматически ищет информацию, 
+                подтверждающую уже существующее убеждение. Это не глупость — это экономия энергии. 
                 Но в сложном мире это приводит к систематическим ошибкам.
               </p>
               <p className="text-sm text-purple-700">
@@ -133,6 +133,20 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
+          <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
+          <p className="text-sm text-stone-600 mb-2">
+            Термин «confirmation bias» ввёл английский психолог <strong>Питер Уэйсон</strong> в 1960 году 
+            в своём классическом эксперименте «2-4-6». Участники должны были угадать правило, по которому 
+            построена тройка чисел. Уэйсон обнаружил, что люди тестируют только те гипотезы, которые 
+            подтверждают их предположения, игнорируя опровергающие.
+          </p>
+          <p className="text-sm text-stone-600">
+            Позже <strong>Даниэль Канеман</strong> и <strong>Амос Тверски</strong> показали, что этот эффект 
+            проявляется во всех сферах — от науки до повседневных решений.
+          </p>
         </div>
 
         <div className="flex gap-3">
@@ -169,7 +183,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
         <h2 className="text-lg font-semibold text-stone-800 mb-2">{currentScenario.title}</h2>
         <p className="text-stone-600 mb-6">{currentScenario.setup}</p>
         
-        <p className="text-sm text-stone-500 mb-3">Выбери, какую информацию ты бы изучил подробнее:</p>
+        <p className="text-sm text-stone-500 mb-3">Выбери исследования, которые ты бы прочитал:</p>
         
         <div className="space-y-2 mb-6">
           {currentScenario.evidence.map((ev, idx) => (
@@ -192,7 +206,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
             onClick={handleContinue}
             className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-xl font-medium transition-colors"
           >
-            {step === scenarios.length - 1 ? 'Завершить' : 'Дальше'}
+            {step === scenarios.length - 1 ? 'Завершить' : 'Далее →'}
           </button>
         )}
       </div>

@@ -112,6 +112,20 @@ export default function HindsightTest({ profile, setProfile }: Props) {
           </div>
         </div>
 
+        <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
+          <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
+          <p className="text-sm text-stone-600 mb-2">
+            Hindsight bias (ошибка выжившего, «эффект «я так и знал!») был исследован <strong>Барухом Фишхоффом</strong> 
+            в 1975 году. В своём классическом эксперименте он давал участникам описание исторических событий 
+            (например, войны между гуронами и британцами) и просил оценить вероятность различных исходов. 
+            После того как участники узнавали реальный исход, они задним числом оценивали его как гораздо более вероятный.
+          </p>
+          <p className="text-sm text-stone-600">
+            Этот эффект особенно опасен в медицине и юриспруденции, где задним числом ошибки кажутся «очевидными», 
+            хотя на момент принятия решения они были неочевидны.
+          </p>
+        </div>
+
         <div className="flex gap-3">
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам

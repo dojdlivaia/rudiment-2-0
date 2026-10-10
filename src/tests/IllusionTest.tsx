@@ -187,6 +187,24 @@ export default function IllusionTest({ profile, setProfile }: Props) {
           </div>
         </div>
 
+        <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
+          <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
+          <p className="text-sm text-stone-600 mb-2">
+            Иллюзия Мюллера-Лайера была описана немецкими психологами <strong>Францем Карлом Мюллер-Лайером</strong> 
+            в 1889 году. Иллюзия Эббингауза (или Титченера) названа в честь немецкого психолога <strong>Германа Эббингауза</strong>, 
+            который опубликовал её в 1902 году (хотя иногда приписывается Эдварду Титченеру).
+          </p>
+          <p className="text-sm text-stone-600 mb-2">
+            Иллюзия тени (checkershadow illusion) была создана нейробиологом <strong>Эдвардом Адельсоном</strong> 
+            из MIT в 1995 году. Она демонстрирует, как мозг компенсирует тени, оценивая не абсолютную яркость, 
+            а относительную — с учётом контекста.
+          </p>
+          <p className="text-sm text-stone-600">
+            <strong>Книга:</strong> «Иллюзии зрения» (Visual Illusions) — коллекция классических оптических иллюзий 
+            с объяснением механизмов их восприятия.
+          </p>
+        </div>
+
         <div className="flex gap-3">
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам

@@ -106,6 +106,7 @@ export default function TowerTest({ profile, setProfile }: Props) {
                 <div className="text-2xl font-bold text-stone-800">{n}</div>
                 <div className="text-xs text-stone-500 mt-1">дисков</div>
                 <div className="text-xs text-stone-400 mt-1">мин. {Math.pow(2, n) - 1} ходов</div>
+              <div className="text-xs text-stone-400 mt-1">2<sup>{n}</sup> − 1</div>
               </button>
             ))}
           </div>
@@ -117,8 +118,8 @@ export default function TowerTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-indigo-800 mb-2">Что это тестирует</h3>
               <p className="text-sm text-indigo-700">
-                Башня Ханоя — классический тест на executive functions: планирование, 
-                рабочую память и когнитивную гибкость. Нужно удерживать в голове 
+                Башня Ханоя — классический тест на <strong>исполнительные функции</strong> (executive functions): 
+                планирование, рабочую память и когнитивную гибкость. Нужно удерживать в голове 
                 несколько шагов вперёд и адаптировать стратегию.
               </p>
             </div>
@@ -165,17 +166,31 @@ export default function TowerTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-indigo-800 mb-2">Что это значит</h3>
               <p className="text-sm text-indigo-700 mb-2">
-                Башня Ханоя тестирует планирование и рабочую память — ключевые executive functions. 
-                Оптимальная стратегия для N дисков: 2^N - 1 ходов. Это рекурсивная задача: 
-                чтобы переместить N дисков, сначала перемести N-1 на вспомогательный стержень, 
-                потом перенеси самый большой, потом верни N-1.
+                Башня Ханоя тестирует планирование и рабочую память — ключевые <strong>исполнительные функции</strong> (executive functions). 
+                Оптимальная стратегия для N дисков: 2<sup>N</sup> − 1 ходов. Это рекурсивная задача: 
+                чтобы переместить N дисков, сначала перемести N−1 на вспомогательный стержень, 
+                потом перенеси самый большой, потом верни N−1.
               </p>
-              <p className="text-sm text-indigo-700">
+              <p className="text-sm text-indigo-700 mb-4">
                 <strong>Совет:</strong> Тренируй планирование, разбивая большие задачи на подзадачи. 
                 Визуализация зависимостей помогает мозгу удерживать структуру.
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
+          <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
+          <p className="text-sm text-stone-600 mb-2">
+            Задача «Башня Ханоя» была придумана французским математиком <strong>Эдуардом Люка</strong> в 1883 году. 
+            Легенда гласит, что в храме города Ханой монахи перемещают 64 золотых диска на трёх алмазных стержнях. 
+            Когда они завершат задачу, мир закончится. При 64 дисках это займёт 2⁶⁴ − 1 = 18 446 744 073 709 551 615 ходов — 
+            примерно 585 миллиардов лет!
+          </p>
+          <p className="text-sm text-stone-600">
+            В когнитивной психологии эта задача используется с 1960-х годов как тест на <strong>исполнительные функции</strong> (executive functions) — 
+            высшие когнитивные процессы, управляющие целенаправленным поведением.
+          </p>
         </div>
 
         <div className="flex gap-3">

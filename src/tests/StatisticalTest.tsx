@@ -138,6 +138,22 @@ export default function StatisticalTest({ profile, setProfile }: Props) {
           </div>
         </div>
 
+        <div className="bg-stone-50 rounded-2xl border border-stone-200 p-6 mb-6">
+          <h3 className="font-semibold text-stone-800 mb-2">📚 Историческая справка</h3>
+          <p className="text-sm text-stone-600 mb-2">
+            Задачу Монти Холла популяризировала колонка <strong>Мэрилин вос Савант</strong> в журнале Parade в 1990 году. 
+            Она вызвала бурную дискуссию — даже известные математики (включая Пола Эрдиша) initially не соглашались с её ответом. 
+            Задача названа в честь ведущего шоу «Let's Make a Deal» Монти Холла.
+          </p>
+          <p className="text-sm text-stone-600 mb-2">
+            Ошибка конъюнкции была описана <strong>Амосом Тверски</strong> и <strong>Даниэлем Канеманом</strong> в 1983 году 
+            в эксперименте с «Линдой» — описанием вымышленной женщины, которое подталкивало к логической ошибке.
+          </p>
+          <p className="text-sm text-stone-600">
+            <strong>Книга:</strong> Даниэль Канеман «Думай медленно... решай быстро» (2011) — разделы о статистическом мышлении.
+          </p>
+        </div>
+
         <div className="flex gap-3">
           <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
             К тестам

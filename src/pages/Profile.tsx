@@ -15,6 +15,15 @@ const biasLabels: Record<string, string> = {
   perception: 'Восприятие',
 };
 
+const biasDescriptions: Record<string, string> = {
+  anchoring: 'Первое число, которое ты видишь, влияет на оценку. Твой раптор цепляется за якорь.',
+  confirmation: 'Ты ищешь подтверждения тому, во что уже веришь. Раптор охраняет свою территорию.',
+  hindsight: 'После того, как узнал результат, кажется, что предсказал бы. Раптор переписывает историю.',
+  baseRate: 'Ты игнорируешь базовую статистику и веришь в детали. Раптор не любит числа.',
+  planning: 'Трудно удерживать в голове несколько шагов вперёд. Кора против раптора.',
+  perception: 'Мозг достраивает реальность. Раптор рисует свою картину мира.',
+};
+
 const normData: Record<string, number> = {
   anchoring: 55,
   confirmation: 60,
@@ -135,11 +144,14 @@ export default function ProfilePage({ profile }: Props) {
             <h3 className="font-semibold text-green-800">Сильные стороны</h3>
           </div>
           {strengths.length > 0 ? (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {strengths.map(([key, val]) => (
-                <li key={key} className="flex items-center justify-between">
-                  <span className="text-sm text-green-700">{biasLabels[key]}</span>
-                  <span className="text-sm font-medium text-green-600">{val}/100</span>
+                <li key={key}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-green-700">{biasLabels[key]}</span>
+                    <span className="text-sm font-medium text-green-600">{val}/100</span>
+                  </div>
+                  <p className="text-xs text-green-600 italic">{biasDescriptions[key]}</p>
                 </li>
               ))}
             </ul>
@@ -154,11 +166,14 @@ export default function ProfilePage({ profile }: Props) {
             <h3 className="font-semibold text-amber-800">Зоны роста</h3>
           </div>
           {weaknesses.length > 0 ? (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {weaknesses.map(([key, val]) => (
-                <li key={key} className="flex items-center justify-between">
-                  <span className="text-sm text-amber-700">{biasLabels[key]}</span>
-                  <span className="text-sm font-medium text-amber-600">{val}/100</span>
+                <li key={key}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-amber-700">{biasLabels[key]}</span>
+                    <span className="text-sm font-medium text-amber-600">{val}/100</span>
+                  </div>
+                  <p className="text-xs text-amber-600 italic">{biasDescriptions[key]}</p>
                 </li>
               ))}
             </ul>

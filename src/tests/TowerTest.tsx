@@ -116,11 +116,12 @@ export default function TowerTest({ profile, setProfile }: Props) {
           <div className="flex items-start gap-3">
             <Info size={20} className="text-indigo-600 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-indigo-800 mb-2">Что это тестирует</h3>
+              <h3 className="font-semibold text-indigo-800 mb-2">Что это тестирует 🦖</h3>
               <p className="text-sm text-indigo-700">
                 Башня Ханоя — классический тест на <strong>исполнительные функции</strong> (executive functions): 
-                планирование, рабочую память и когнитивную гибкость. Нужно удерживать в голове 
-                несколько шагов вперёд и адаптировать стратегию.
+                планирование, рабочую память и когнитивную гибкость. Это зона ответственности коры головного мозга — 
+                той самой, которая эволюционировала позже рептильного мозга. Пока раптор хочет действовать быстро 
+                и интуитивно, кора пытается удержать в голове несколько шагов вперёд и построить стратегию.
               </p>
             </div>
           </div>

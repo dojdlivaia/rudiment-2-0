@@ -20,7 +20,6 @@ const scenarios = [
       text: 'Йогурт на 90% обезжиренный',
       question: 'Купишь этот йогурт?',
     },
-    correctAnswer: 'Одинаково',
     explanation: 'Это один и тот же йогурт! 10% жира = 90% обезжиренный. Но формулировка влияет на восприятие: «90% обезжиренный» звучит привлекательнее, хотя это одно и то же. Раптор реагирует на слова, а не на суть.',
   },
   {
@@ -34,7 +33,6 @@ const scenarios = [
       text: 'В программе умрут 400 из 600 человек',
       question: 'Поддержишь эту программу?',
     },
-    correctAnswer: 'Одинаково',
     explanation: 'Это одна и та же программа! Спасти 200 = потерять 400. Но формулировка «спасёт» вызывает поддержку, а «умрут» — отторжение. Раптор реагирует на эмоциональные слова, а кора должна видеть математику.',
   },
   {
@@ -48,7 +46,6 @@ const scenarios = [
       text: 'Мясо содержит 20% жира',
       question: 'Купишь это мясо?',
     },
-    correctAnswer: 'Одинаково',
     explanation: 'Это одно и то же мясо! 80% постного = 20% жира. Но «80% постного» звучит диетичнее. Раптор цепляется за позитивную формулировку, хотя суть не меняется.',
   },
   {
@@ -62,7 +59,6 @@ const scenarios = [
       text: 'Бонус за пунктуальность — 500 рублей (теряешь при опоздании)',
       question: 'Опоздаешь?',
     },
-    correctAnswer: 'Одинаково',
     explanation: 'Математически это одно и то же: опоздание = потеря 500 рублей. Но «штраф» воспринимается как наказание, а «потеря бонуса» — как упущенная выгода. Исследования показывают, что люди сильнее реагируют на потери, чем на эквивалентные штрафы (эффект неприятия потерь).',
   },
 ];
@@ -70,33 +66,31 @@ const scenarios = [
 export default function FramingTest({ profile, setProfile }: Props) {
   const [step, setStep] = useState(0);
   const [phase, setPhase] = useState<'A' | 'B'>('A');
-  const [answers, setAnswers] = useState<{ A: string; B: string }[]>([]);
-  const [currentAnswer, setCurrentAnswer] = useState('');
+  const [answersA, setAnswersA] = useState<string[]>([]);
+  const [answersB, setAnswersB] = useState<string[]>([]);
   const [finished, setFinished] = useState(false);
 
   const currentScenario = scenarios[step];
   const currentVersion = phase === 'A' ? currentScenario.versionA : currentScenario.versionB;
 
   const handleAnswer = (answer: string) => {
-    setCurrentAnswer(answer);
-    
     if (phase === 'A') {
+      // Сохраняем ответ A
+      const newAnswersA = [...answersA, answer];
+      setAnswersA(newAnswersA);
       // Переходим к версии B
-      setTimeout(() => {
-        setPhase('B');
-        setCurrentAnswer('');
-      }, 500);
+      setPhase('B');
     } else {
-      // Завершаем сценарий
-      const newAnswers = [...answers, { A: answers[step]?.A || currentAnswer, B: answer }];
-      setAnswers(newAnswers);
+      // Сохраняем ответ B
+      const newAnswersB = [...answersB, answer];
+      setAnswersB(newAnswersB);
 
       if (step === scenarios.length - 1) {
         setFinished(true);
         // Подсчёт: сколько раз человек ответил одинаково на A и B
         let score = 0;
-        newAnswers.forEach(a => {
-          if (a.A === a.B) score++;
+        answersA.forEach((a: string, i: number) => {
+          if (a === newAnswersB[i]) score++;
         });
         
         const result = {
@@ -105,21 +99,20 @@ export default function FramingTest({ profile, setProfile }: Props) {
           date: new Date().toISOString(),
           score,
           maxScore: scenarios.length,
-          details: { answers: newAnswers },
+          details: { answersA: answersA, answersB: newAnswersB },
         };
         setProfile(addTestResult(profile, result));
       } else {
         setStep(step + 1);
         setPhase('A');
-        setCurrentAnswer('');
       }
     }
   };
 
   if (finished) {
     let consistentCount = 0;
-    answers.forEach(a => {
-      if (a.A === a.B) consistentCount++;
+    answersA.forEach((a, i) => {
+      if (a === answersB[i]) consistentCount++;
     });
     
     return (
@@ -145,16 +138,16 @@ export default function FramingTest({ profile, setProfile }: Props) {
                   <div className="bg-blue-50 p-2 rounded">
                     <p className="text-blue-700 font-medium mb-1">Версия A:</p>
                     <p className="text-stone-600">{s.versionA.text}</p>
-                    <p className="text-blue-600 mt-1">Ответ: {answers[i].A}</p>
+                    <p className="text-blue-600 mt-1">Ответ: {answersA[i]}</p>
                   </div>
                   <div className="bg-purple-50 p-2 rounded">
                     <p className="text-purple-700 font-medium mb-1">Версия B:</p>
                     <p className="text-stone-600">{s.versionB.text}</p>
-                    <p className="text-purple-600 mt-1">Ответ: {answers[i].B}</p>
+                    <p className="text-purple-600 mt-1">Ответ: {answersB[i]}</p>
                   </div>
                 </div>
-                <p className={`text-xs mt-2 ${answers[i].A === answers[i].B ? 'text-green-600' : 'text-orange-600'}`}>
-                  {answers[i].A === answers[i].B ? '✓ Последовательно' : '🦖 Формулировка повлияла'}
+                <p className={`text-xs mt-2 ${answersA[i] === answersB[i] ? 'text-green-600' : 'text-orange-600'}`}>
+                  {answersA[i] === answersB[i] ? '✓ Последовательно' : '🦖 Формулировка повлияла'}
                 </p>
               </div>
             ))}
@@ -167,7 +160,7 @@ export default function FramingTest({ profile, setProfile }: Props) {
             <div>
               <h3 className="font-semibold text-pink-800 mb-2">Как это работает 🦖</h3>
               <p className="text-sm text-pink-700 mb-2">
-                Эффект формулировки (framing effect) — наш рептильный мозг реагирует на слова, а не на суть. 
+                Наш рептильный мозг реагирует на слова, а не на суть. 
                 «90% обезжиренный» звучит лучше, чем «10% жира», хотя это одно и то же. Раптор эволюционировал 
                 реагировать на эмоциональные сигналы: «спасёт» vs «умрут», «штраф» vs «потеря бонуса». 
                 Кора головного мозга должна перевести слова в математику, но раптор уже принял решение.

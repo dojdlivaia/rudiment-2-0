@@ -99,23 +99,90 @@ export default function AnchorTest({ profile, setProfile }: Props) {
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <h2 className="font-semibold text-stone-800 mb-4">Разбор ответов</h2>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {questions.map((q, i) => {
               const answer = answers[i] || 0;
               const distFromAnchor = Math.abs(answer - q.anchor);
               const distFromCorrect = Math.abs(answer - q.correctAnswer);
+              const totalDist = distFromAnchor + distFromCorrect;
+              
+              // Процент влияния якоря: чем ближе к якорю, тем выше процент
+              const anchorInfluence = totalDist > 0 ? Math.round((1 - distFromAnchor / totalDist) * 100) : 50;
               const wasAnchored = distFromAnchor < distFromCorrect;
+              const wasResistant = distFromAnchor > distFromCorrect;
+              const wasNeutral = distFromAnchor === distFromCorrect;
               
               return (
-                <div key={i} className="border-b border-stone-100 pb-3 last:border-0">
-                  <p className="text-sm font-medium text-stone-700 mb-1">{q.question}</p>
-                  <div className="flex flex-wrap gap-3 text-sm">
-                    <span className="text-stone-500">Якорь: <strong>{q.anchor}</strong></span>
-                    <span className="text-stone-500">Твой ответ: <strong>{answer}</strong></span>
-                    <span className="text-stone-500">Правильно: <strong>{q.correctAnswer}</strong></span>
-                    <span className={wasAnchored ? 'text-red-500' : 'text-green-600'}>
-                      {wasAnchored ? '🦖 Раптор потянул к якорю' : '✓ Устоял'}
-                    </span>
+                <div key={i} className="border-b border-stone-100 pb-4 last:border-0">
+                  <p className="text-sm font-medium text-stone-700 mb-3">{q.question}</p>
+                  
+                  {/* Числовое сравнение */}
+                  <div className="grid grid-cols-3 gap-2 text-xs mb-3">
+                    <div className="bg-stone-50 p-2 rounded text-center">
+                      <p className="text-stone-500">Якорь</p>
+                      <p className="text-lg font-bold text-stone-700">{q.anchor}</p>
+                    </div>
+                    <div className={`p-2 rounded text-center ${wasAnchored ? 'bg-orange-50' : wasResistant ? 'bg-green-50' : 'bg-blue-50'}`}>
+                      <p className="text-stone-500">Твой ответ</p>
+                      <p className="text-lg font-bold text-stone-800">{answer}</p>
+                    </div>
+                    <div className="bg-stone-50 p-2 rounded text-center">
+                      <p className="text-stone-500">Правильно</p>
+                      <p className="text-lg font-bold text-stone-700">{q.correctAnswer}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Визуальная шкала */}
+                  <div className="relative h-8 bg-stone-100 rounded-full mb-2 overflow-hidden">
+                    {/* Якорь */}
+                    <div 
+                      className="absolute top-0 bottom-0 w-1 bg-stone-400"
+                      style={{ left: '0%' }}
+                    />
+                    {/* Правильный ответ */}
+                    <div 
+                      className="absolute top-0 bottom-0 w-1 bg-stone-400"
+                      style={{ left: '100%' }}
+                    />
+                    {/* Твой ответ */}
+                    <div 
+                      className={`absolute top-1 bottom-1 w-3 rounded-full ${
+                        wasAnchored ? 'bg-orange-500' : wasResistant ? 'bg-green-500' : 'bg-blue-500'
+                      }`}
+                      style={{ left: `${(distFromAnchor / totalDist) * 100}%`, transform: 'translateX(-50%)' }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-stone-400 mb-3">
+                    <span>← Якорь</span>
+                    <span>Правильно →</span>
+                  </div>
+                  
+                  {/* Интерпретация */}
+                  <div className={`p-3 rounded-lg ${
+                    wasAnchored ? 'bg-orange-50 border border-orange-200' : 
+                    wasResistant ? 'bg-green-50 border border-green-200' : 
+                    'bg-blue-50 border border-blue-200'
+                  }`}>
+                    {wasAnchored && (
+                      <p className="text-sm text-orange-700">
+                        <span className="font-medium">🦖 Раптор потянул к якорю</span><br/>
+                        <span className="text-xs">Твой ответ ближе к якорю ({q.anchor}), чем к правильному ({q.correctAnswer}). 
+                        Влияние якоря: {anchorInfluence}%</span>
+                      </p>
+                    )}
+                    {wasResistant && (
+                      <p className="text-sm text-green-700">
+                        <span className="font-medium">✓ Ты устоял</span><br/>
+                        <span className="text-xs">Твой ответ ближе к правильному ({q.correctAnswer}), чем к якорю ({q.anchor}). 
+                        Раптор не смог тебя потянуть.</span>
+                      </p>
+                    )}
+                    {wasNeutral && (
+                      <p className="text-sm text-blue-700">
+                        <span className="font-medium">⚖️ Нейтрально</span><br/>
+                        <span className="text-xs">Твой ответ одинаково далёк от якоря и правильного ответа.</span>
+                      </p>
+                    )}
                   </div>
                 </div>
               );
@@ -134,7 +201,7 @@ export default function AnchorTest({ profile, setProfile }: Props) {
                 становится «якорем» — точкой отсчёта, от которой трудно уйти.
               </p>
               <p className="text-sm text-green-700 mb-2">
-                <strong>Почему так?</strong> Наш рептильный мозг (тот самый велоцираптор внутри) 
+                Наш рептильный мозг (тот самый велоцираптор внутри) 
                 эволюционировал для быстрых решений в саванне. Увидел число — зацепился за него, 
                 как за ветку. Кора головного мозга пытается скорректировать, но раптор уже принял решение.
               </p>

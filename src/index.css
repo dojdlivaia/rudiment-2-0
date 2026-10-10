@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+@theme {
+  --color-raptor-50: #f0fdf4;
+  --color-raptor-100: #dcfce7;
+  --color-raptor-200: #bbf7d0;
+  --color-raptor-300: #86efac;
+  --color-raptor-400: #4ade80;
+  --color-raptor-500: #22c55e;
+  --color-raptor-600: #16a34a;
+  --color-raptor-700: #15803d;
+  --color-raptor-800: #166534;
+  --color-raptor-900: #14532d;
+  --color-amber-warm: #f59e0b;
+  --color-coral: #f97316;
+  --color-deep: #1e1b4b;
+  --color-surface: #fafaf9;
+  --color-surface-dark: #1c1917;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(135deg, #fafaf9 0%, #f0fdf4 50%, #fefce8 100%);
+  min-height: 100vh;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}

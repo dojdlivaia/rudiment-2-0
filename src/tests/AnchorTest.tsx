@@ -1,0 +1,231 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { UserProfile, addTestResult } from '../store';
+import { ArrowLeft, CheckCircle, Info } from 'lucide-react';
+
+interface Props {
+  profile: UserProfile;
+  setProfile: (p: UserProfile) => void;
+}
+
+const questions = [
+  {
+    id: 1,
+    anchor: 1945,
+    question: 'В каком году был основан ООН?',
+    correctAnswer: 1945,
+    tolerance: 5,
+  },
+  {
+    id: 2,
+    anchor: 680,
+    question: 'Какова высота Эйфелевой башни (в метрах)?',
+    correctAnswer: 330,
+    tolerance: 50,
+  },
+  {
+    id: 3,
+    anchor: 15,
+    question: 'Сколько процентов поверхности Земли покрыто водой?',
+    correctAnswer: 71,
+    tolerance: 10,
+  },
+  {
+    id: 4,
+    anchor: 2500,
+    question: 'Сколько лет Великой Китайской стене (примерно)?',
+    correctAnswer: 2300,
+    tolerance: 300,
+  },
+  {
+    id: 5,
+    anchor: 80,
+    question: 'Какова средняя температура тела человека (°C)?',
+    correctAnswer: 36.6,
+    tolerance: 1,
+  },
+];
+
+export default function AnchorTest({ profile, setProfile }: Props) {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null));
+  const [showAnchor, setShowAnchor] = useState(true);
+  const [finished, setFinished] = useState(false);
+  const [currentInput, setCurrentInput] = useState('');
+
+  const currentQ = questions[step];
+  const isLast = step === questions.length - 1;
+
+  const handleNext = () => {
+    if (currentInput === '') return;
+    const newAnswers = [...answers];
+    newAnswers[step] = Number(currentInput);
+    setAnswers(newAnswers);
+    setCurrentInput('');
+
+    if (isLast) {
+      setFinished(true);
+      // Calculate score
+      let score = 0;
+      const maxScore = questions.length;
+      const details: Record<string, any> = {};
+      
+      questions.forEach((q, i) => {
+        const answer = newAnswers[i] || 0;
+        const anchorInfluence = Math.abs(answer - q.anchor) < Math.abs(q.correctAnswer - q.anchor) * 0.5;
+        const correct = Math.abs(answer - q.correctAnswer) <= q.tolerance;
+        if (correct) score++;
+        details[`q${i}`] = { answer, anchor: q.anchor, correct, anchorInfluence };
+      });
+
+      // Score based on resistance to anchoring
+      const anchoringResistance = questions.reduce((acc, q, i) => {
+        const answer = newAnswers[i] || 0;
+        const distanceFromAnchor = Math.abs(answer - q.anchor);
+        const distanceFromCorrect = Math.abs(answer - q.correctAnswer);
+        // If answer is closer to anchor than to correct, that's anchoring
+        if (distanceFromAnchor < distanceFromCorrect) return acc;
+        return acc + 1;
+      }, 0);
+
+      const finalScore = Math.round((anchoringResistance / questions.length) * maxScore);
+      
+      const result = {
+        id: Date.now().toString(),
+        testType: 'anchoring',
+        date: new Date().toISOString(),
+        score: finalScore,
+        maxScore,
+        details,
+      };
+      
+      setProfile(addTestResult(profile, result));
+    } else {
+      setStep(step + 1);
+      setShowAnchor(true);
+    }
+  };
+
+  if (finished) {
+    const details = profile.testResults[profile.testResults.length - 1]?.details || {};
+    
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
+        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Эффект якоря</h1>
+        
+        <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
+          <h2 className="font-semibold text-stone-800 mb-4">Разбор ответов</h2>
+          <div className="space-y-4">
+            {questions.map((q, i) => {
+              const answer = answers[i] || 0;
+              const distFromAnchor = Math.abs(answer - q.anchor);
+              const distFromCorrect = Math.abs(answer - q.correctAnswer);
+              const wasAnchored = distFromAnchor < distFromCorrect;
+              
+              return (
+                <div key={i} className="border-b border-stone-100 pb-3 last:border-0">
+                  <p className="text-sm font-medium text-stone-700 mb-1">{q.question}</p>
+                  <div className="flex flex-wrap gap-3 text-sm">
+                    <span className="text-stone-500">Якорь: <strong>{q.anchor}</strong></span>
+                    <span className="text-stone-500">Твой ответ: <strong>{answer}</strong></span>
+                    <span className="text-stone-500">Правильно: <strong>{q.correctAnswer}</strong></span>
+                    <span className={wasAnchored ? 'text-red-500' : 'text-raptor-600'}>
+                      {wasAnchored ? '🦖 Раптор потянул к якорю' : '✓ Устоял'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-raptor-50 rounded-2xl border border-raptor-200 p-6 mb-6">
+          <div className="flex items-start gap-3">
+            <Info size={20} className="text-raptor-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-raptor-800 mb-2">Как это работает</h3>
+              <p className="text-sm text-raptor-700 mb-2">
+                Эффект якоря — одна из самых мощных когнитивных ловушек. Даже зная о нём, 
+                мы не можем полностью отключить его. Первое число, которое мы видим, 
+                становится «якорем» — точкой отсчёта, от которой трудно уйти.
+              </p>
+              <p className="text-sm text-raptor-700">
+                <strong>Совет:</strong> Перед оценкой попробуй сформулировать «нулевую гипотезу» — 
+                что бы ты ответил, не видя первого числа. Это снижает эффект якоря.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <Link to="/tests" className="flex-1 text-center bg-stone-100 text-stone-700 px-4 py-3 rounded-xl font-medium">
+            К тестам
+          </Link>
+          <Link to="/profile" className="flex-1 text-center bg-raptor-600 text-white px-4 py-3 rounded-xl font-medium">
+            Мой профиль
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
+      <Link to="/tests" className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-700 mb-6">
+        <ArrowLeft size={16} /> Назад к тестам
+      </Link>
+
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-stone-800">Эффект якоря</h1>
+        <span className="text-sm text-stone-500">{step + 1} / {questions.length}</span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full bg-stone-200 rounded-full h-2 mb-8">
+        <div
+          className="bg-raptor-500 h-2 rounded-full transition-all"
+          style={{ width: `${((step + 1) / questions.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="bg-white rounded-2xl border border-stone-200 p-6">
+        {/* Anchor display */}
+        {showAnchor && (
+          <div className="text-center mb-6 animate-fade-in">
+            <p className="text-sm text-stone-500 mb-2">Случайное число для тебя:</p>
+            <div className="text-5xl font-bold text-stone-300">{currentQ.anchor}</div>
+            <button
+              onClick={() => setShowAnchor(false)}
+              className="mt-3 text-sm text-raptor-600 hover:text-raptor-700"
+            >
+              Понятно, дальше →
+            </button>
+          </div>
+        )}
+
+        {/* Question */}
+        {!showAnchor && (
+          <div className="animate-fade-in">
+            <p className="text-lg font-medium text-stone-800 mb-6">{currentQ.question}</p>
+            <input
+              type="number"
+              value={currentInput}
+              onChange={e => setCurrentInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleNext()}
+              placeholder="Твой ответ..."
+              className="w-full px-4 py-3 border border-stone-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-raptor-400 focus:border-transparent"
+              autoFocus
+            />
+            <button
+              onClick={handleNext}
+              disabled={currentInput === ''}
+              className="mt-4 w-full bg-raptor-600 hover:bg-raptor-700 disabled:bg-stone-300 text-white px-4 py-3 rounded-xl font-medium transition-colors"
+            >
+              {isLast ? 'Завершить' : 'Дальше'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

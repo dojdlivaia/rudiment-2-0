@@ -12,6 +12,10 @@ import CalibrationTest from './tests/CalibrationTest';
 import StatisticalTest from './tests/StatisticalTest';
 import IllusionTest from './tests/IllusionTest';
 import TowerTest from './tests/TowerTest';
+import SunkCostTest from './tests/SunkCostTest';
+import FramingTest from './tests/FramingTest';
+import AvailabilityTest from './tests/AvailabilityTest';
+import PlanningFallacyTest from './tests/PlanningFallacyTest';
 import { loadProfile, UserProfile } from './store';
 
 function App() {
@@ -102,6 +106,10 @@ function App() {
           <Route path="/test/statistical" element={<StatisticalTest profile={profile} setProfile={setProfile} />} />
           <Route path="/test/illusion" element={<IllusionTest profile={profile} setProfile={setProfile} />} />
           <Route path="/test/planning" element={<TowerTest profile={profile} setProfile={setProfile} />} />
+          <Route path="/test/sunk-cost" element={<SunkCostTest profile={profile} setProfile={setProfile} />} />
+          <Route path="/test/framing" element={<FramingTest profile={profile} setProfile={setProfile} />} />
+          <Route path="/test/availability" element={<AvailabilityTest profile={profile} setProfile={setProfile} />} />
+          <Route path="/test/planning-fallacy" element={<PlanningFallacyTest profile={profile} setProfile={setProfile} />} />
         </Routes>
       </main>
 

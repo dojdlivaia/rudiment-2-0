@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Brain, Target, Eye, Puzzle, TrendingUp, Shield } from 'lucide-react';
+import { Brain, Target, Eye, Puzzle, TrendingUp, Shield, DollarSign, MessageSquare, Search, Clock } from 'lucide-react';
 import { UserProfile } from '../store';
 
 interface Props {
@@ -114,6 +114,34 @@ export default function HomePage({ profile }: Props) {
             description="Мозг достраивает реальность. Посмотрим, как именно."
             color="bg-cyan-50 text-cyan-700 border-cyan-200"
             link="/test/illusion"
+          />
+          <TestCard
+            icon={<DollarSign size={24} />}
+            title="Ошибка невозвратных затрат"
+            description="Продолжать ли то, во что уже вложено много ресурсов?"
+            color="bg-orange-50 text-orange-700 border-orange-200"
+            link="/test/sunk-cost"
+          />
+          <TestCard
+            icon={<MessageSquare size={24} />}
+            title="Эффект формулировки"
+            description="Одна и та же информация в разной подаче меняет решение."
+            color="bg-pink-50 text-pink-700 border-pink-200"
+            link="/test/framing"
+          />
+          <TestCard
+            icon={<Search size={24} />}
+            title="Эффект доступности"
+            description="Оценка вероятности по тому, что легко вспомнить."
+            color="bg-teal-50 text-teal-700 border-teal-200"
+            link="/test/availability"
+          />
+          <TestCard
+            icon={<Clock size={24} />}
+            title="Ошибка планирования"
+            description="Оценка времени задач vs реальность. Раптор слишком оптимистичен."
+            color="bg-violet-50 text-violet-700 border-violet-200"
+            link="/test/planning-fallacy"
           />
         </div>
       </section>

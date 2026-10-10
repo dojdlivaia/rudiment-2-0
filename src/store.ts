@@ -36,6 +36,10 @@ const defaultProfile: UserProfile = {
     baseRate: 0,
     planning: 0,
     perception: 0,
+    sunkCost: 0,
+    framing: 0,
+    availability: 0,
+    planningFallacy: 0,
   },
 };
 
@@ -101,6 +105,10 @@ function calculateBiasScores(profile: UserProfile): Record<string, number> {
     baseRate: 0,
     planning: 0,
     perception: 0,
+    sunkCost: 0,
+    framing: 0,
+    availability: 0,
+    planningFallacy: 0,
   };
 
   const typeMap: Record<string, string> = {
@@ -111,6 +119,10 @@ function calculateBiasScores(profile: UserProfile): Record<string, number> {
     statistical: 'baseRate',
     planning: 'planning',
     illusion: 'perception',
+    sunkCost: 'sunkCost',
+    framing: 'framing',
+    availability: 'availability',
+    planningFallacy: 'planningFallacy',
   };
 
   // Calculate average score per bias type (0-100, higher = more susceptible)

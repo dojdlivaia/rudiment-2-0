@@ -36,6 +36,10 @@ export default function ProgressPage({ profile }: Props) {
     statistical: 'baseRate',
     planning: 'planning',
     illusion: 'perception',
+    sunkCost: 'sunkCost',
+    framing: 'framing',
+    availability: 'availability',
+    planningFallacy: 'planningFallacy',
   };
 
   profile.testResults.forEach(r => {
@@ -55,6 +59,10 @@ export default function ProgressPage({ profile }: Props) {
     baseRate: 'Игнорирование базовой вероятности',
     planning: 'Планирование',
     perception: 'Восприятие',
+    sunkCost: 'Ошибка невозвратных затрат',
+    framing: 'Эффект формулировки',
+    availability: 'Эффект доступности',
+    planningFallacy: 'Ошибка планирования',
   };
 
   const biasColors: Record<string, string> = {
@@ -64,6 +72,10 @@ export default function ProgressPage({ profile }: Props) {
     baseRate: '#ef4444',
     planning: '#6366f1',
     perception: '#06b6d4',
+    sunkCost: '#f97316',
+    framing: '#ec4899',
+    availability: '#14b8a6',
+    planningFallacy: '#8b5cf6',
   };
 
   if (profile.testResults.length === 0) {

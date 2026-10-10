@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Brain, Target, Shield, Eye, TrendingUp, Puzzle, ChevronRight } from 'lucide-react';
+import { Brain, Target, Shield, Eye, TrendingUp, Puzzle, ChevronRight, DollarSign, MessageSquare, Search, Clock } from 'lucide-react';
 import { UserProfile } from '../store';
 
 interface Props {
@@ -70,6 +70,42 @@ const tests = [
     description: 'Executive functions и рабочая память',
     duration: '5 мин',
     color: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+  },
+  {
+    id: 'sunkCost',
+    path: '/test/sunk-cost',
+    icon: <DollarSign size={24} />,
+    title: 'Ошибка невозвратных затрат',
+    description: 'Продолжать ли то, во что уже вложено много ресурсов?',
+    duration: '3 мин',
+    color: 'bg-orange-50 border-orange-200 text-orange-700',
+  },
+  {
+    id: 'framing',
+    path: '/test/framing',
+    icon: <MessageSquare size={24} />,
+    title: 'Эффект формулировки',
+    description: 'Одна и та же информация в разной подаче',
+    duration: '4 мин',
+    color: 'bg-pink-50 border-pink-200 text-pink-700',
+  },
+  {
+    id: 'availability',
+    path: '/test/availability',
+    icon: <Search size={24} />,
+    title: 'Эффект доступности',
+    description: 'Оценка вероятности по тому, что легко вспомнить',
+    duration: '3 мин',
+    color: 'bg-teal-50 border-teal-200 text-teal-700',
+  },
+  {
+    id: 'planningFallacy',
+    path: '/test/planning-fallacy',
+    icon: <Clock size={24} />,
+    title: 'Ошибка планирования',
+    description: 'Оценка времени задач vs реальность',
+    duration: '3 мин',
+    color: 'bg-violet-50 border-violet-200 text-violet-700',
   },
 ];
 

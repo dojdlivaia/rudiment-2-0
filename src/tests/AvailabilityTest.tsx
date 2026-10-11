@@ -15,7 +15,9 @@ const questions = [
     optionA: 'Акулы',
     optionB: 'Коровы (от бодания/падения)',
     correct: 'B',
-    explanation: 'Правильный ответ — коровы. В мире от акул погибает около 5-10 человек в год, а от коров — около 20-25 человек. Но мы чаще слышим про акул в новостях, поэтому раптор думает, что они опаснее. Это эффект доступности: то, что легче вспомнить, кажется более вероятным.',
+    statsA: '~5-10 человек',
+    statsB: '~20-25 человек',
+    explanation: 'Правильный ответ — коровы. В мире от акул погибает около 5-10 человек в год, а от коров — около 20-25 человек (от бодания, падения или несчастных случаев на фермах). Но мы чаще слышим про акул в новостях и фильмах (вспомни «Челюсти»), поэтому раптор думает, что они опаснее. Это эффект доступности: то, что легче вспомнить, кажется более вероятным.',
   },
   {
     id: 2,
@@ -23,7 +25,9 @@ const questions = [
     optionA: 'Авиакатастрофа',
     optionB: 'Автокатастрофа',
     correct: 'B',
-    explanation: 'Правильный ответ — автокатастрофа. Вероятность погибнуть в автокатастрофе в сотни раз выше, чем в авиакатастрофе. Но авиакатастрофы получают больше внимания в СМИ, они драматичнее и запоминаются лучше. Раптор оценивает риск по тому, насколько легко вспомнить примеры.',
+    statsA: '~1 погибший на 10 млн рейсов',
+    statsB: '~1 погибший на 100 млн км',
+    explanation: 'Правильный ответ — автокатастрофа. Вероятность погибнуть в автокатастрофе в сотни раз выше, чем в авиакатастрофе. Самолёт — самый безопасный вид транспорта. Но авиакатастрофы получают огромное внимание в СМИ, они драматичнее и запоминаются лучше. Раптор оценивает риск по тому, насколько легко вспомнить примеры.',
   },
   {
     id: 3,
@@ -31,7 +35,9 @@ const questions = [
     optionA: 'Террористический акт',
     optionB: 'Сердечное заболевание',
     correct: 'B',
-    explanation: 'Правильный ответ — сердечные заболевания. В развитых странах от болезней сердца умирает около 30% людей, а от терроризма — менее 0.001%. Но террористические акты получают огромное внимание в СМИ, создавая иллюзию высокой вероятности. Раптор реагирует на драматичные, яркие события.',
+    statsA: '~26 000 человек в год (мировой терроризм)',
+    statsB: '~18 миллионов человек в год',
+    explanation: 'Правильный ответ — сердечные заболевания. В мире от болезней сердца умирает около 18 миллионов человек в год (это ~30% всех смертей), а от терроризма — менее 26 000. Разница в 700 раз! Но террористические акты получают огромное внимание в СМИ, создавая иллюзию высокой вероятности. Раптор реагирует на драматичные, яркие события.',
   },
   {
     id: 4,
@@ -39,21 +45,26 @@ const questions = [
     optionA: 'Курение',
     optionB: 'Радиация от АЭС (при нормальной работе)',
     correct: 'A',
-    explanation: 'Правильный ответ — курение. Курение убивает около 8 миллионов человек в год во всём мире. Радиация от нормально работающих АЭС практически безопасна и вызывает менее 100 смертей в год. Но аварии на АЭС (Чернобыль, Фукусима) так драматичны, что раптор переоценивает риск.',
+    statsA: '~8 миллионов смертей в год',
+    statsB: '~100 смертей в год (при нормальной работе)',
+    explanation: 'Правильный ответ — курение. Курение убивает около 8 миллионов человек в год во всём мире (это ~15% всех смертей). Радиация от нормально работающих АЭС практически безопасна и вызывает менее 100 смертей в год (в основном работники АЭС). Но аварии на АЭС (Чернобыль, Фукусима) так драматичны, что раптор переоценивает риск в тысячи раз.',
   },
   {
     id: 5,
-    question: 'Что чаще встречается?',
-    optionA: 'Слово на букву "К"',
-    optionB: 'Слово с "К" на третьей позиции',
+    question: 'Что чаще встречается в русском языке?',
+    optionA: 'Слово, начинающееся на букву "К"',
+    optionB: 'Слово, где "К" стоит на третьей позиции',
     correct: 'B',
-    explanation: 'Правильный ответ — слова с "К" на третьей позиции. В русском языке таких слов больше, но нам легче вспомнить слова, начинающиеся на "К", потому что мы ищем их по первой букве. Раптор оценивает частоту по тому, насколько легко прийти в голову примеры.',
+    statsA: '~5% слов',
+    statsB: '~8% слов',
+    explanation: 'Правильный ответ — слова с "К" на третьей позиции. В русском языке таких слов действительно больше (около 8% против 5% для первой позиции). Но нам легче вспомнить слова, начинающиеся на "К", потому что мы ищем их по первой букве — это естественный способ поиска в памяти. Раптор оценивает частоту по тому, насколько легко прийти в голову примеры, а не по реальной статистике.',
   },
 ];
 
 export default function AvailabilityTest({ profile, setProfile }: Props) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [showExplanation, setShowExplanation] = useState(false);
   const [finished, setFinished] = useState(false);
 
   const currentQuestion = questions[step];
@@ -61,17 +72,21 @@ export default function AvailabilityTest({ profile, setProfile }: Props) {
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
     setAnswers(newAnswers);
+    setShowExplanation(true);
+  };
 
+  const handleNext = () => {
+    setShowExplanation(false);
     if (step === questions.length - 1) {
       setFinished(true);
-      const score = newAnswers.filter((a, i) => a === questions[i].correct).length;
+      const score = answers.filter((a, i) => a === questions[i].correct).length;
       const result = {
         id: Date.now().toString(),
         testType: 'availability',
         date: new Date().toISOString(),
         score,
         maxScore: questions.length,
-        details: { answers: newAnswers },
+        details: { answers },
       };
       setProfile(addTestResult(profile, result));
     } else {
@@ -160,22 +175,49 @@ export default function AvailabilityTest({ profile, setProfile }: Props) {
       <div className="bg-white rounded-2xl border border-stone-200 p-6">
         <h2 className="text-lg font-semibold text-stone-800 mb-4">{currentQuestion.question}</h2>
         
-        <div className="space-y-2">
-          <button
-            onClick={() => handleAnswer('A')}
-            className="w-full text-left p-4 rounded-xl border border-stone-200 hover:border-teal-300 hover:bg-teal-50 
-                       text-stone-700 transition-all"
-          >
-            <span className="font-medium">{currentQuestion.optionA}</span>
-          </button>
-          <button
-            onClick={() => handleAnswer('B')}
-            className="w-full text-left p-4 rounded-xl border border-stone-200 hover:border-teal-300 hover:bg-teal-50 
-                       text-stone-700 transition-all"
-          >
-            <span className="font-medium">{currentQuestion.optionB}</span>
-          </button>
-        </div>
+        {!showExplanation ? (
+          <div className="space-y-2">
+            <button
+              onClick={() => handleAnswer('A')}
+              className="w-full text-left p-4 rounded-xl border border-stone-200 hover:border-teal-300 hover:bg-teal-50 
+                         text-stone-700 transition-all"
+            >
+              <span className="font-medium">{currentQuestion.optionA}</span>
+            </button>
+            <button
+              onClick={() => handleAnswer('B')}
+              className="w-full text-left p-4 rounded-xl border border-stone-200 hover:border-teal-300 hover:bg-teal-50 
+                         text-stone-700 transition-all"
+            >
+              <span className="font-medium">{currentQuestion.optionB}</span>
+            </button>
+          </div>
+        ) : (
+          <div className="animate-fade-in">
+            <div className={`p-4 rounded-xl mb-4 ${answers[step] === currentQuestion.correct ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+              <p className="font-medium text-sm mb-2">
+                {answers[step] === currentQuestion.correct ? '✓ Верно!' : '✗ Не совсем...'}
+              </p>
+              <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+                <div className="bg-blue-50 p-2 rounded">
+                  <p className="text-blue-700 font-medium">{currentQuestion.optionA}</p>
+                  <p className="text-stone-600 mt-1">{currentQuestion.statsA}</p>
+                </div>
+                <div className="bg-purple-50 p-2 rounded">
+                  <p className="text-purple-700 font-medium">{currentQuestion.optionB}</p>
+                  <p className="text-stone-600 mt-1">{currentQuestion.statsB}</p>
+                </div>
+              </div>
+              <p className="text-sm text-stone-700">{currentQuestion.explanation}</p>
+            </div>
+            <button
+              onClick={handleNext}
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-xl font-medium transition-colors"
+            >
+              {step === questions.length - 1 ? 'Завершить' : 'Далее →'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

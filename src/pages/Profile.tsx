@@ -63,15 +63,15 @@ export default function ProfilePage({ profile }: Props) {
       exercise: 'Перед оценкой запиши «нулевую гипотезу» — что бы ты сказал, не видя первого числа. Сравни.',
     },
     confirmation: {
-      title: 'Confirmation Bias',
+      title: 'Склонность к подтверждению (Confirmation Bias)',
       exercise: 'Когда формируешь мнение, специально найди 3 аргумента ПРОТИВ. Запиши их.',
     },
     hindsight: {
-      title: 'Hindsight Bias',
+      title: 'Эффект «я так и знал!» (Hindsight Bias)',
       exercise: 'Перед важным событием запиши свой прогноз. После — сравни с реальностью честно.',
     },
     baseRate: {
-      title: 'Base Rate Fallacy',
+      title: 'Игнорирование базовой вероятности (Base Rate Fallacy)',
       exercise: 'Решая задачу, сначала спроси: «Какова базовая вероятность?» Только потом учитывай детали.',
     },
     planning: {
@@ -126,21 +126,43 @@ export default function ProfilePage({ profile }: Props) {
       {/* Calibration */}
       {calibrationData.length > 0 && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-stone-800 mb-4">Калибровка уверенности</h2>
-          <div className="h-56">
+          <h2 className="text-lg font-semibold text-stone-800 mb-2">Калибровка уверенности</h2>
+          <p className="text-sm text-stone-500 mb-4">
+            Насколько точно твоя уверенность соответствует реальности?
+          </p>
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={calibrationData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f4" />
-                <XAxis dataKey="confidence" tick={{ fontSize: 12 }} label={{ value: 'Уверенность %', position: 'bottom', fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 12 }} label={{ value: 'Точность %', angle: -90, position: 'insideLeft', fontSize: 11 }} />
-                <Tooltip />
+                <XAxis 
+                  dataKey="confidence" 
+                  tick={{ fontSize: 12 }} 
+                  label={{ value: 'Уверенность в ответе (%)', position: 'bottom', offset: 0, fontSize: 11 }}
+                />
+                <YAxis 
+                  tick={{ fontSize: 12 }} 
+                  label={{ value: 'Правильных ответов (%)', angle: -90, position: 'insideLeft', fontSize: 11 }}
+                  domain={[0, 100]}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [`${value}%`, 'Правильных ответов']}
+                  labelFormatter={(label) => `Уверенность: ${label}%`}
+                />
                 <Bar dataKey="accuracy" fill="#22c55e" radius={[4, 4, 0, 0]} name="Точность" />
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <p className="text-xs text-stone-400 text-center mt-2">
-            Идеальная калибровка: столбцы совпадают с диагональю (уверенность = точность)
-          </p>
+          <div className="mt-4 p-3 bg-stone-50 rounded-lg">
+            <p className="text-xs text-stone-600">
+              <strong>Как читать график:</strong> Каждый столбец показывает группу вопросов, 
+              где ты был уверен на определённый процент (например, 50% — средняя уверенность). 
+              Высота столбца — сколько из этих ответов оказались правильными.
+            </p>
+            <p className="text-xs text-stone-600 mt-2">
+              <strong>Идеальная калибровка:</strong> Если ты был уверен на 70%, то 70% ответов должны быть правильными. 
+              Столбцы должны следовать диагонали снизу-слева вверх-вправо.
+            </p>
+          </div>
         </div>
       )}
 

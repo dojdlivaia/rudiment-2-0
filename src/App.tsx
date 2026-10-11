@@ -95,7 +95,7 @@ function App() {
       {/* Main content */}
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<HomePage profile={profile} />} />
+          <Route path="/" element={<HomePage profile={profile} setProfile={setProfile} />} />
           <Route path="/tests" element={<TestsPage profile={profile} setProfile={setProfile} />} />
           <Route path="/profile" element={<ProfilePage profile={profile} />} />
           <Route path="/progress" element={<ProgressPage profile={profile} />} />

@@ -63,6 +63,32 @@ export function saveProfile(profile: UserProfile): void {
   }
 }
 
+export function resetProfile(): UserProfile {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {
+    console.error('Failed to reset profile:', e);
+  }
+  return {
+    testResults: [],
+    calibrationData: [],
+    streak: 0,
+    lastVisit: '',
+    biasScores: {
+      anchoring: 0,
+      confirmation: 0,
+      hindsight: 0,
+      baseRate: 0,
+      planning: 0,
+      perception: 0,
+      sunkCost: 0,
+      framing: 0,
+      availability: 0,
+      planningFallacy: 0,
+    },
+  };
+}
+
 export function addTestResult(profile: UserProfile, result: TestResult): UserProfile {
   const newProfile = {
     ...profile,

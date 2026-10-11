@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom';
-import { Brain, Target, Eye, Puzzle, TrendingUp, Shield, DollarSign, MessageSquare, Search, Clock } from 'lucide-react';
-import { UserProfile } from '../store';
+import { Brain, Target, Eye, Puzzle, TrendingUp, Shield, DollarSign, MessageSquare, Search, Clock, Trash2 } from 'lucide-react';
+import { UserProfile, resetProfile } from '../store';
 
 interface Props {
   profile: UserProfile;
+  setProfile: (p: UserProfile) => void;
 }
 
-export default function HomePage({ profile }: Props) {
+export default function HomePage({ profile, setProfile }: Props) {
   const totalTests = profile.testResults.length;
   const streak = profile.streak;
+
+  const handleReset = () => {
+    if (window.confirm('Вы уверены? Вся статистика будет удалена.')) {
+      const emptyProfile = resetProfile();
+      setProfile(emptyProfile);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 animate-fade-in">
@@ -51,22 +59,33 @@ export default function HomePage({ profile }: Props) {
 
       {/* Stats */}
       {totalTests > 0 && (
-        <section className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-          <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
-            <div className="text-3xl font-bold text-green-600">{totalTests}</div>
-            <div className="text-sm text-stone-500 mt-1">Тестов пройдено</div>
-          </div>
-          <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
-            <div className="text-3xl font-bold text-amber-500">{streak} 🔥</div>
-            <div className="text-sm text-stone-500 mt-1">Дней подряд</div>
-          </div>
-          <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center col-span-2 md:col-span-1">
-            <div className="text-3xl font-bold text-orange-500">
-              {Math.round(Object.values(profile.biasScores).reduce((a, b) => a + b, 0) / Math.max(Object.values(profile.biasScores).filter(v => v > 0).length, 1))}
+        <>
+          <section className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
+              <div className="text-3xl font-bold text-green-600">{totalTests}</div>
+              <div className="text-sm text-stone-500 mt-1">Тестов пройдено</div>
             </div>
-            <div className="text-sm text-stone-500 mt-1">Средняя уязвимость</div>
+            <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center">
+              <div className="text-3xl font-bold text-amber-500">{streak} 🔥</div>
+              <div className="text-sm text-stone-500 mt-1">Дней подряд</div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 border border-stone-200 text-center col-span-2 md:col-span-1">
+              <div className="text-3xl font-bold text-orange-500">
+                {Math.round(Object.values(profile.biasScores).reduce((a, b) => a + b, 0) / Math.max(Object.values(profile.biasScores).filter(v => v > 0).length, 1))}
+              </div>
+              <div className="text-sm text-stone-500 mt-1">Средняя уязвимость</div>
+            </div>
+          </section>
+          <div className="flex justify-center mb-12">
+            <button
+              onClick={handleReset}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm text-stone-500 hover:text-red-600 border border-stone-200 hover:border-red-300 rounded-xl transition-colors"
+            >
+              <Trash2 size={16} />
+              Сбросить статистику
+            </button>
           </div>
-        </section>
+        </>
       )}
 
       {/* Test categories */}

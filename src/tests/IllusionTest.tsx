@@ -83,17 +83,18 @@ const illusions = [
         <ellipse cx="180" cy="80" rx="45" ry="20" fill="#57534e" opacity="0.4" />
         <rect x="135" y="40" width="90" height="40" fill="#57534e" opacity="0.3" />
         
-        {/* Квадрат A в тени - темный */}
+        {/* Квадрат A в тени - темный (такой же цвет как Б!) */}
         <rect x="150" y="100" width="30" height="30" fill="#57534e" />
-        {/* Метка A - белая с обводкой для контраста */}
-        <circle cx="165" cy="115" r="10" fill="white" stroke="#1c1917" strokeWidth="2" />
-        <text x="165" y="120" textAnchor="middle" fill="#1c1917" fontSize="14" fontWeight="bold">A</text>
         
-        {/* Квадрат Б на свету - светлый */}
+        {/* Квадрат Б на свету - светлый (такой же цвет как A!) */}
         <rect x="215" y="60" width="30" height="30" fill="#86efac" />
-        {/* Метка Б - белая с обводкой для контраста */}
-        <circle cx="230" cy="75" r="10" fill="white" stroke="#1c1917" strokeWidth="2" />
-        <text x="230" y="80" textAnchor="middle" fill="#1c1917" fontSize="14" fontWeight="bold">Б</text>
+        
+        {/* Метки A и Б - стрелки указывают на квадраты */}
+        <line x1="165" y1="135" x2="165" y2="150" stroke="#1c1917" strokeWidth="2" />
+        <text x="165" y="165" textAnchor="middle" fill="#1c1917" fontSize="16" fontWeight="bold">A</text>
+        
+        <line x1="230" y1="55" x2="230" y2="40" stroke="#1c1917" strokeWidth="2" />
+        <text x="230" y="35" textAnchor="middle" fill="#1c1917" fontSize="16" fontWeight="bold">Б</text>
       </svg>
     ),
     options: ['A темнее Б', 'Б темнее A', 'Они одинаковые по яркости'],
@@ -102,37 +103,24 @@ const illusions = [
   },
   {
     id: 4,
-    title: 'Адаптация цвета',
-    description: 'Смотри на центральный крест 10 секунд. Что происходит с цветными точками?',
+    title: 'Иллюзия Понцо',
+    description: 'Какая горизонтальная линия длиннее?',
     render: () => (
-      <div className="relative w-full max-w-sm mx-auto h-48 bg-stone-100 rounded-xl overflow-hidden flex items-center justify-center">
-        <div className="text-4xl text-stone-400">✚</div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-40 h-40">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => (
-              <div
-                key={i}
-                className="absolute w-5 h-5 rounded-full"
-                style={{
-                  background: i === 3 ? '#22c55e' : '#f97316',
-                  top: `${50 + 45 * Math.sin((i / 12) * Math.PI * 2)}%`,
-                  left: `${50 + 45 * Math.cos((i / 12) * Math.PI * 2)}%`,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <svg viewBox="0 0 300 200" className="w-full max-w-sm mx-auto">
+        {/* Сходящиеся линии (как рельсы уходящие вдаль) */}
+        <line x1="50" y1="180" x2="130" y2="20" stroke="#1c1917" strokeWidth="3" />
+        <line x1="250" y1="180" x2="170" y2="20" stroke="#1c1917" strokeWidth="3" />
+        
+        {/* Верхняя линия (между сходящимися ближе к вершине) */}
+        <line x1="110" y1="60" x2="190" y2="60" stroke="#1c1917" strokeWidth="4" />
+        
+        {/* Нижняя линия (между сходящимися дальше от вершины) */}
+        <line x1="80" y1="140" x2="220" y2="140" stroke="#1c1917" strokeWidth="4" />
+      </svg>
     ),
-    options: [
-      'Точки движутся по кругу',
-      'Появляется зелёная точка, бегущая по кругу',
-      'Оранжевые точки исчезают',
-      'Всё неподвижно',
-    ],
-    correct: 1,
-    explanation: 'Это иллюзия «исчезающей» точки. Когда ты фиксируешь взгляд на кресте, периферическое зрение адаптируется к оранжевым точкам (нейронная адаптация), и они «исчезают». Но зелёная точка — новая, и мозг её «ловит». Создаётся иллюзия бегущей зелёной точки.',
+    options: ['Верхняя длиннее', 'Нижняя длиннее', 'Они одинаковые'],
+    correct: 2,
+    explanation: 'Обе линии абсолютно одинаковые (80px)! Мозг интерпретирует сходящиеся линии как перспективу — рельсы, уходящие вдаль. Верхняя линия кажется «дальше», поэтому мозг «увеличивает» её, компенсируя расстояние. Это та же механика, что и в иллюзии Мюллера-Лайера.',
   },
 ];
 

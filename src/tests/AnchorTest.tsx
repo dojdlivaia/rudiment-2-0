@@ -9,41 +9,42 @@ interface Props {
   setProfile: (p: UserProfile) => void;
 }
 
-// Генерация последовательности вопросов с повторами
+// Генерация последовательности вопросов с гарантированной уникальностью пар (вопрос + якорь)
 function generateQuestionSequence() {
   const sequence: { question: AnchorQuestion; anchor: number }[] = [];
+  const usedPairs = new Set<string>(); // Для отслеживания уникальных пар
   
-  // Берём 6 случайных вопросов
-  const selectedQuestions = [...anchorQuestions]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 6);
+  // Создаём пул всех возможных пар (вопрос + якорь)
+  const allPairs: { question: AnchorQuestion; anchor: number }[] = [];
   
-  // Для каждого вопроса используем якорь из факта
-  selectedQuestions.forEach(q => {
-    sequence.push({ question: q, anchor: q.anchor });
-  });
-  
-  // Добавляем 2 повтора с другими якорями (если возможно)
-  const repeatQuestions = selectedQuestions.slice(0, 2);
-  repeatQuestions.forEach(q => {
-    // Находим другой якорь из базы для того же вопроса
+  anchorQuestions.forEach(q => {
+    // Добавляем оригинальный якорь
+    allPairs.push({ question: q, anchor: q.anchor });
+    
+    // Добавляем альтернативные якоря из других версий того же вопроса
     const otherVersions = anchorQuestions.filter(
       aq => aq.question === q.question && aq.anchor !== q.anchor
     );
-    if (otherVersions.length > 0) {
-      const otherQ = otherVersions[Math.floor(Math.random() * otherVersions.length)];
-      sequence.push({ question: q, anchor: otherQ.anchor });
-    } else {
-      // Если нет другого якоря, используем случайное число в том же диапазоне
-      const range = Math.abs(q.correctAnswer - q.anchor);
-      const newAnchor = q.anchor > q.correctAnswer 
-        ? q.correctAnswer + range 
-        : q.correctAnswer - range;
-      sequence.push({ question: q, anchor: Math.max(0, newAnchor) });
-    }
+    otherVersions.forEach(otherQ => {
+      allPairs.push({ question: q, anchor: otherQ.anchor });
+    });
   });
   
-  // Перемешиваем
+  // Перемешиваем пул
+  const shuffledPairs = allPairs.sort(() => Math.random() - 0.5);
+  
+  // Берём первые 8 уникальных пар
+  for (const pair of shuffledPairs) {
+    if (sequence.length >= 8) break;
+    
+    const pairKey = `${pair.question.id}-${pair.anchor}`;
+    if (!usedPairs.has(pairKey)) {
+      sequence.push(pair);
+      usedPairs.add(pairKey);
+    }
+  }
+  
+  // Перемешиваем финальную последовательность
   return sequence.sort(() => Math.random() - 0.5);
 }
 

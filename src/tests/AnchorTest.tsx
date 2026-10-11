@@ -2,107 +2,45 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserProfile, addTestResult } from '../store';
 import { ArrowLeft, Info } from 'lucide-react';
+import { anchorQuestions, AnchorQuestion } from '../data/anchorQuestions';
 
 interface Props {
   profile: UserProfile;
   setProfile: (p: UserProfile) => void;
 }
 
-// Банк вопросов с разными якорями
-const questionBank = [
-  {
-    id: 1,
-    question: 'В каком году был основан ООН?',
-    correctAnswer: 1945,
-    tolerance: 5,
-    anchors: [1900, 1990], // Два разных якоря
-  },
-  {
-    id: 2,
-    question: 'Какова высота Эйфелевой башни (в метрах)?',
-    correctAnswer: 330,
-    tolerance: 50,
-    anchors: [100, 600],
-  },
-  {
-    id: 3,
-    question: 'Сколько процентов поверхности Земли покрыто водой?',
-    correctAnswer: 71,
-    tolerance: 10,
-    anchors: [20, 90],
-  },
-  {
-    id: 4,
-    question: 'Сколько лет Великой Китайской стене (примерно)?',
-    correctAnswer: 2300,
-    tolerance: 300,
-    anchors: [500, 4000],
-  },
-  {
-    id: 5,
-    question: 'Какова средняя температура тела человека (°C)?',
-    correctAnswer: 36.6,
-    tolerance: 1,
-    anchors: [30, 42],
-  },
-  {
-    id: 6,
-    question: 'Сколько планет в Солнечной системе?',
-    correctAnswer: 8,
-    tolerance: 0,
-    anchors: [5, 12],
-  },
-  {
-    id: 7,
-    question: 'В каком году человек впервые полетел в космос?',
-    correctAnswer: 1961,
-    tolerance: 5,
-    anchors: [1940, 1980],
-  },
-  {
-    id: 8,
-    question: 'Сколько костей в теле взрослого человека?',
-    correctAnswer: 206,
-    tolerance: 20,
-    anchors: [150, 300],
-  },
-  {
-    id: 9,
-    question: 'Какова длина экватора Земли (в тыс. км)?',
-    correctAnswer: 40,
-    tolerance: 5,
-    anchors: [20, 60],
-  },
-  {
-    id: 10,
-    question: 'Сколько зубов у взрослого человека?',
-    correctAnswer: 32,
-    tolerance: 2,
-    anchors: [20, 45],
-  },
-];
-
 // Генерация последовательности вопросов с повторами
 function generateQuestionSequence() {
-  const sequence: { questionId: number; anchor: number }[] = [];
+  const sequence: { question: AnchorQuestion; anchor: number }[] = [];
   
   // Берём 6 случайных вопросов
-  const selectedQuestions = [...questionBank]
+  const selectedQuestions = [...anchorQuestions]
     .sort(() => Math.random() - 0.5)
     .slice(0, 6);
   
-  // Для каждого вопроса выбираем случайный якорь
+  // Для каждого вопроса используем якорь из факта
   selectedQuestions.forEach(q => {
-    const anchor = q.anchors[Math.floor(Math.random() * q.anchors.length)];
-    sequence.push({ questionId: q.id, anchor });
+    sequence.push({ question: q, anchor: q.anchor });
   });
   
-  // Добавляем 2 повтора с другими якорями
+  // Добавляем 2 повтора с другими якорями (если возможно)
   const repeatQuestions = selectedQuestions.slice(0, 2);
   repeatQuestions.forEach(q => {
-    const usedAnchor = sequence.find(s => s.questionId === q.id)?.anchor;
-    const otherAnchor = q.anchors.find(a => a !== usedAnchor) || q.anchors[0];
-    sequence.push({ questionId: q.id, anchor: otherAnchor });
+    // Находим другой якорь из базы для того же вопроса
+    const otherVersions = anchorQuestions.filter(
+      aq => aq.question === q.question && aq.anchor !== q.anchor
+    );
+    if (otherVersions.length > 0) {
+      const otherQ = otherVersions[Math.floor(Math.random() * otherVersions.length)];
+      sequence.push({ question: q, anchor: otherQ.anchor });
+    } else {
+      // Если нет другого якоря, используем случайное число в том же диапазоне
+      const range = Math.abs(q.correctAnswer - q.anchor);
+      const newAnchor = q.anchor > q.correctAnswer 
+        ? q.correctAnswer + range 
+        : q.correctAnswer - range;
+      sequence.push({ question: q, anchor: Math.max(0, newAnchor) });
+    }
   });
   
   // Перемешиваем
@@ -113,12 +51,11 @@ export default function AnchorTest({ profile, setProfile }: Props) {
   const [sequence] = useState(() => generateQuestionSequence());
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
-  const [showAnchor, setShowAnchor] = useState(true);
+  const [showFact, setShowFact] = useState(true);
   const [finished, setFinished] = useState(false);
   const [currentInput, setCurrentInput] = useState('');
 
-  const currentQ = questionBank.find(q => q.id === sequence[step].questionId)!;
-  const currentAnchor = sequence[step].anchor;
+  const currentItem = sequence[step];
   const isLast = step === sequence.length - 1;
 
   const handleNext = () => {
@@ -132,11 +69,10 @@ export default function AnchorTest({ profile, setProfile }: Props) {
       
       // Подсчёт устойчивости к якорю
       let anchoringResistance = 0;
-      sequence.forEach((s, i) => {
-        const q = questionBank.find(q => q.id === s.questionId)!;
+      sequence.forEach((item, i) => {
         const answer = newAnswers[i];
-        const distanceFromAnchor = Math.abs(answer - s.anchor);
-        const distanceFromCorrect = Math.abs(answer - q.correctAnswer);
+        const distanceFromAnchor = Math.abs(answer - item.anchor);
+        const distanceFromCorrect = Math.abs(answer - item.question.correctAnswer);
         if (distanceFromAnchor >= distanceFromCorrect) anchoringResistance++;
       });
 
@@ -148,13 +84,13 @@ export default function AnchorTest({ profile, setProfile }: Props) {
         date: new Date().toISOString(),
         score: finalScore,
         maxScore: sequence.length,
-        details: { sequence, answers: newAnswers },
+        details: { sequence: sequence.map(s => ({ questionId: s.question.id, anchor: s.anchor })), answers: newAnswers },
       };
       
       setProfile(addTestResult(profile, result));
     } else {
       setStep(step + 1);
-      setShowAnchor(true);
+      setShowFact(true);
     }
   };
 
@@ -166,10 +102,10 @@ export default function AnchorTest({ profile, setProfile }: Props) {
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <h2 className="font-semibold text-stone-800 mb-4">Разбор ответов</h2>
           <div className="space-y-6">
-            {sequence.map((s, i) => {
-              const q = questionBank.find(q => q.id === s.questionId)!;
+            {sequence.map((item, i) => {
+              const q = item.question;
               const answer = answers[i];
-              const anchor = s.anchor;
+              const anchor = item.anchor;
               const distFromAnchor = Math.abs(answer - anchor);
               const distFromCorrect = Math.abs(answer - q.correctAnswer);
               const totalDist = distFromAnchor + distFromCorrect;
@@ -186,15 +122,15 @@ export default function AnchorTest({ profile, setProfile }: Props) {
                   <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="bg-stone-50 p-2 rounded text-center">
                       <p className="text-stone-500">Якорь</p>
-                      <p className="text-lg font-bold text-stone-700">{anchor}</p>
+                      <p className="text-lg font-bold text-stone-700">{anchor}{q.unit && ` ${q.unit}`}</p>
                     </div>
                     <div className={`p-2 rounded text-center ${wasAnchored ? 'bg-orange-50' : wasResistant ? 'bg-green-50' : 'bg-blue-50'}`}>
                       <p className="text-stone-500">Твой ответ</p>
-                      <p className="text-lg font-bold text-stone-800">{answer}</p>
+                      <p className="text-lg font-bold text-stone-800">{answer}{q.unit && ` ${q.unit}`}</p>
                     </div>
                     <div className="bg-stone-50 p-2 rounded text-center">
                       <p className="text-stone-500">Правильно</p>
-                      <p className="text-lg font-bold text-stone-700">{q.correctAnswer}</p>
+                      <p className="text-lg font-bold text-stone-700">{q.correctAnswer}{q.unit && ` ${q.unit}`}</p>
                     </div>
                   </div>
                   
@@ -309,22 +245,22 @@ export default function AnchorTest({ profile, setProfile }: Props) {
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6">
-        {showAnchor && (
+        {showFact ? (
           <div className="text-center mb-6 animate-fade-in">
-            <p className="text-sm text-stone-500 mb-2">Случайное число для тебя:</p>
-            <div className="text-5xl font-bold text-stone-300">{currentAnchor}</div>
+            <p className="text-sm text-stone-500 mb-3">Занимательный факт:</p>
+            <div className="bg-stone-50 rounded-xl p-4 mb-4">
+              <p className="text-lg text-stone-700">{currentItem.question.fact}</p>
+            </div>
             <button
-              onClick={() => setShowAnchor(false)}
-              className="mt-3 text-sm text-green-600 hover:text-green-700"
+              onClick={() => setShowFact(false)}
+              className="text-sm text-green-600 hover:text-green-700"
             >
               Понятно, дальше →
             </button>
           </div>
-        )}
-
-        {!showAnchor && (
+        ) : (
           <div className="animate-fade-in">
-            <p className="text-lg font-medium text-stone-800 mb-6">{currentQ.question}</p>
+            <p className="text-lg font-medium text-stone-800 mb-6">{currentItem.question.question}</p>
             <input
               type="number"
               value={currentInput}

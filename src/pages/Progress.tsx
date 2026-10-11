@@ -120,9 +120,28 @@ export default function ProgressPage({ profile }: Props) {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={timelineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f4" />
-                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
-                <YAxis tick={{ fontSize: 11 }} domain={[0, 100]} />
-                <Tooltip />
+                <XAxis 
+                  dataKey="date" 
+                  tick={{ fontSize: 11 }} 
+                  tickFormatter={(v) => {
+                    const date = new Date(v);
+                    const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+                    return `${date.getDate()} ${months[date.getMonth()]}`;
+                  }}
+                  label={{ value: 'Дата', position: 'insideBottom', offset: -5, fontSize: 11 }}
+                />
+                <YAxis 
+                  tick={{ fontSize: 11 }} 
+                  domain={[0, 100]}
+                  label={{ value: 'Результат %', angle: -90, position: 'insideLeft', fontSize: 11 }}
+                />
+                <Tooltip 
+                  labelFormatter={(v) => {
+                    const date = new Date(v);
+                    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                  }}
+                  formatter={(value: number) => [`${Math.round(value)}%`, 'Результат']}
+                />
                 <Area type="monotone" dataKey="avgScore" stroke="#22c55e" fill="#dcfce7" name="Результат %" />
               </AreaChart>
             </ResponsiveContainer>

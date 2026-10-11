@@ -14,17 +14,25 @@ const illusions = [
     title: 'Иллюзия Мюллера-Лайера',
     description: 'Какая линия длиннее?',
     render: () => (
-      <svg viewBox="0 0 300 150" className="w-full max-w-sm mx-auto">
-        <line x1="50" y1="50" x2="250" y2="50" stroke="#1c1917" strokeWidth="3" />
-        <line x1="50" y1="50" x2="70" y2="35" stroke="#1c1917" strokeWidth="3" />
-        <line x1="50" y1="50" x2="70" y2="65" stroke="#1c1917" strokeWidth="3" />
-        <line x1="250" y1="50" x2="230" y2="35" stroke="#1c1917" strokeWidth="3" />
-        <line x1="250" y1="50" x2="230" y2="65" stroke="#1c1917" strokeWidth="3" />
-        <line x1="50" y1="110" x2="250" y2="110" stroke="#1c1917" strokeWidth="3" />
-        <line x1="50" y1="110" x2="70" y2="95" stroke="#1c1917" strokeWidth="3" />
-        <line x1="50" y1="110" x2="70" y2="125" stroke="#1c1917" strokeWidth="3" />
-        <line x1="250" y1="110" x2="230" y2="95" stroke="#1c1917" strokeWidth="3" />
-        <line x1="250" y1="110" x2="230" y2="125" stroke="#1c1917" strokeWidth="3" />
+      <svg viewBox="0 0 300 180" className="w-full max-w-sm mx-auto">
+        {/* Верхняя линия со сходящимися стрелками (выглядит длиннее) */}
+        <g transform="translate(30, 0)">
+          <line x1="20" y1="60" x2="220" y2="60" stroke="#1c1917" strokeWidth="3" />
+          {/* Стрелки сходятся внутрь */}
+          <line x1="20" y1="60" x2="40" y2="45" stroke="#1c1917" strokeWidth="3" />
+          <line x1="20" y1="60" x2="40" y2="75" stroke="#1c1917" strokeWidth="3" />
+          <line x1="220" y1="60" x2="200" y2="45" stroke="#1c1917" strokeWidth="3" />
+          <line x1="220" y1="60" x2="200" y2="75" stroke="#1c1917" strokeWidth="3" />
+        </g>
+        {/* Нижняя линия с расходящимися стрелками (выглядит короче) */}
+        <g transform="translate(50, 0)">
+          <line x1="20" y1="130" x2="220" y2="130" stroke="#1c1917" strokeWidth="3" />
+          {/* Стрелки расходятся наружу */}
+          <line x1="20" y1="130" x2="5" y2="115" stroke="#1c1917" strokeWidth="3" />
+          <line x1="20" y1="130" x2="5" y2="145" stroke="#1c1917" strokeWidth="3" />
+          <line x1="220" y1="130" x2="235" y2="115" stroke="#1c1917" strokeWidth="3" />
+          <line x1="220" y1="130" x2="235" y2="145" stroke="#1c1917" strokeWidth="3" />
+        </g>
       </svg>
     ),
     options: ['Верхняя длиннее', 'Нижняя длиннее', 'Они одинаковые'],
@@ -61,6 +69,7 @@ const illusions = [
     description: 'Какого цвета квадраты A и Б?',
     render: () => (
       <svg viewBox="0 0 300 200" className="w-full max-w-sm mx-auto">
+        {/* Шахматная доска */}
         <rect x="20" y="20" width="260" height="160" fill="#4ade80" />
         <rect x="20" y="20" width="65" height="40" fill="#16a34a" />
         <rect x="150" y="20" width="65" height="40" fill="#16a34a" />
@@ -69,12 +78,22 @@ const illusions = [
         <rect x="20" y="100" width="65" height="40" fill="#16a34a" />
         <rect x="150" y="100" width="65" height="40" fill="#16a34a" />
         <rect x="85" y="140" width="65" height="40" fill="#16a34a" />
+        
+        {/* Тень от цилиндра */}
         <ellipse cx="180" cy="80" rx="45" ry="20" fill="#57534e" opacity="0.4" />
         <rect x="135" y="40" width="90" height="40" fill="#57534e" opacity="0.3" />
+        
+        {/* Квадрат A в тени - темный */}
         <rect x="150" y="100" width="30" height="30" fill="#57534e" />
-        <text x="165" y="120" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">A</text>
+        {/* Метка A - белая с обводкой для контраста */}
+        <circle cx="165" cy="115" r="10" fill="white" stroke="#1c1917" strokeWidth="2" />
+        <text x="165" y="120" textAnchor="middle" fill="#1c1917" fontSize="14" fontWeight="bold">A</text>
+        
+        {/* Квадрат Б на свету - светлый */}
         <rect x="215" y="60" width="30" height="30" fill="#86efac" />
-        <text x="230" y="80" textAnchor="middle" fill="#166534" fontSize="12" fontWeight="bold">Б</text>
+        {/* Метка Б - белая с обводкой для контраста */}
+        <circle cx="230" cy="75" r="10" fill="white" stroke="#1c1917" strokeWidth="2" />
+        <text x="230" y="80" textAnchor="middle" fill="#1c1917" fontSize="14" fontWeight="bold">Б</text>
       </svg>
     ),
     options: ['A темнее Б', 'Б темнее A', 'Они одинаковые по яркости'],
@@ -93,14 +112,12 @@ const illusions = [
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => (
               <div
                 key={i}
-                className="absolute w-4 h-4 rounded-full"
+                className="absolute w-5 h-5 rounded-full"
                 style={{
                   background: i === 3 ? '#22c55e' : '#f97316',
                   top: `${50 + 45 * Math.sin((i / 12) * Math.PI * 2)}%`,
                   left: `${50 + 45 * Math.cos((i / 12) * Math.PI * 2)}%`,
                   transform: 'translate(-50%, -50%)',
-                  animation: `pulse-soft 1s ease-in-out ${i * 0.15}s infinite`,
-                  opacity: 0.9,
                 }}
               />
             ))}

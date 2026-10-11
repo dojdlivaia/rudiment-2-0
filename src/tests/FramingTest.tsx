@@ -61,12 +61,97 @@ const scenarios = [
     },
     explanation: 'Математически это одно и то же: опоздание = потеря 500 рублей. Но «штраф» воспринимается как наказание, а «потеря бонуса» — как упущенная выгода.',
   },
+  {
+    id: 5,
+    title: 'Хирургическая операция',
+    versionA: {
+      text: 'Выживаемость после операции — 90%',
+      question: 'Согласишься на операцию?',
+    },
+    versionB: {
+      text: 'Смертность после операции — 10%',
+      question: 'Согласишься на операцию?',
+    },
+    explanation: 'Это одна и та же статистика! 90% выживаемости = 10% смертности. Но «выживаемость» звучит обнадеживающе, а «смертность» пугает.',
+  },
+  {
+    id: 6,
+    title: 'Скидка',
+    versionA: {
+      text: 'Скидка 30% на товар',
+      question: 'Купишь товар?',
+    },
+    versionB: {
+      text: 'Наценка 30% отменена',
+      question: 'Купишь товар?',
+    },
+    explanation: 'Математически это одно и то же: финальная цена одинакова. Но «скидка» воспринимается как выгода, а «отмена наценки» — как возврат к норме.',
+  },
+  {
+    id: 7,
+    title: 'Инвестиция',
+    versionA: {
+      text: 'Инвестиция принесёт прибыль 15%',
+      question: 'Вложишь деньги?',
+    },
+    versionB: {
+      text: 'Инвестиция имеет риск потери 15%',
+      question: 'Вложишь деньги?',
+    },
+    explanation: 'Это зеркальные формулировки одного и того же ожидаемого результата. Но «прибыль» привлекает, а «риск потери» отпугивает, хотя математически это одно и то же.',
+  },
+  {
+    id: 8,
+    title: 'Успешность диеты',
+    versionA: {
+      text: '70% людей достигают цели на этой диете',
+      question: 'Попробуешь диету?',
+    },
+    versionB: {
+      text: '30% людей не достигают цели на этой диете',
+      question: 'Попробуешь диету?',
+    },
+    explanation: 'Это одна и та же статистика! 70% успеха = 30% неудачи. Но «успех» мотивирует, а «неудача» демотивирует.',
+  },
+  {
+    id: 9,
+    title: 'Безопасность автомобиля',
+    versionA: {
+      text: 'Автомобиль снижает риск аварии на 40%',
+      question: 'Купишь этот автомобиль?',
+    },
+    versionB: {
+      text: 'Автомобиль всё ещё имеет 60% риска аварии',
+      question: 'Купишь этот автомобиль?',
+    },
+    explanation: 'Это одна и та же информация! Снижение риска на 40% = оставшийся риск 60%. Но «снижение риска» звучит как улучшение, а «риск аварии» пугает.',
+  },
+  {
+    id: 10,
+    title: 'Энергосбережение',
+    versionA: {
+      text: 'Лампа экономит 80% электроэнергии',
+      question: 'Купишь эту лампу?',
+    },
+    versionB: {
+      text: 'Лампа потребляет только 20% электроэнергии обычной',
+      question: 'Купишь эту лампу?',
+    },
+    explanation: 'Это одно и то же! Экономия 80% = потребление 20%. Но «экономит» звучит как выгода, а «потребляет только» — как ограничение.',
+  },
 ];
 
-// Генерация последовательности: сначала все A в случайном порядке, потом все B в другом случайном порядке
+// Генерация последовательности: выбираем 5 случайных сценариев, сначала все A, потом все B
 function generateSequence() {
-  const indicesA = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
-  const indicesB = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+  // Выбираем 5 случайных сценариев из 10
+  const selectedIndices = Array.from({ length: scenarios.length }, (_, i) => i)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5);
+  
+  // Фаза A: выбранные сценарии в случайном порядке
+  const indicesA = [...selectedIndices].sort(() => Math.random() - 0.5);
+  // Фаза B: те же сценарии в другом случайном порядке
+  const indicesB = [...selectedIndices].sort(() => Math.random() - 0.5);
   
   return {
     phaseA: indicesA.map(i => ({ scenarioIndex: i, version: 'A' as const })),
@@ -104,6 +189,7 @@ export default function FramingTest({ profile, setProfile }: Props) {
         
         // Подсчёт последовательности: сравниваем ответы для каждого сценария
         let consistentCount = 0;
+        const totalScenarios = sequence.phaseA.length;
         sequence.phaseA.forEach((itemA, i) => {
           const itemB = sequence.phaseB.find(item => item.scenarioIndex === itemA.scenarioIndex);
           if (itemB) {
@@ -118,7 +204,7 @@ export default function FramingTest({ profile, setProfile }: Props) {
           testType: 'framing',
           date: new Date().toISOString(),
           score: consistentCount,
-          maxScore: scenarios.length,
+          maxScore: totalScenarios,
           details: { answersA: answersA, answersB: newAnswersB, sequence },
         };
         setProfile(addTestResult(profile, result));
@@ -130,6 +216,7 @@ export default function FramingTest({ profile, setProfile }: Props) {
 
   if (finished) {
     let consistentCount = 0;
+    const totalScenarios = sequence.phaseA.length;
     const comparisonData: { scenario: typeof scenarios[0]; answerA: string; answerB: string; consistent: boolean }[] = [];
     
     sequence.phaseA.forEach((itemA, i) => {
@@ -154,11 +241,11 @@ export default function FramingTest({ profile, setProfile }: Props) {
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
-            <div className="text-4xl font-bold text-stone-800">{consistentCount}/{scenarios.length}</div>
+            <div className="text-4xl font-bold text-stone-800">{consistentCount}/{totalScenarios}</div>
             <p className="text-stone-500 mt-1">последовательных ответов</p>
             <p className="text-sm text-stone-400 mt-2">
-              {consistentCount === scenarios.length ? '🎯 Отлично! Раптор не смог тебя обмануть' :
-               consistentCount >= scenarios.length / 2 ? 'Неплохо, но формулировки всё же влияют' :
+              {consistentCount === totalScenarios ? '🎯 Отлично! Раптор не смог тебя обмануть' :
+               consistentCount >= totalScenarios / 2 ? 'Неплохо, но формулировки всё же влияют' :
                '🦖 Раптор реагирует на слова, а не на суть'}
             </p>
           </div>

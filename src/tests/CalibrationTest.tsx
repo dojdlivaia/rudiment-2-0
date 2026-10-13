@@ -129,7 +129,13 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
 
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Калибровка</h1>
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-6">
+          <p className="text-sm text-green-700 mb-2">Это был эксперимент на</p>
+          <h1 className="text-3xl font-bold text-green-800 mb-2">Калибровку уверенности</h1>
+          <p className="text-stone-600">Насколько точно твоя уверенность соответствует реальности?</p>
+        </div>
+        
+        <h2 className="text-xl font-bold text-stone-800 mb-4">Твои результаты</h2>
         
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="bg-white rounded-xl border border-stone-200 p-4 text-center">
@@ -214,7 +220,7 @@ export default function CalibrationTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Калибровка уверенности</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эксперимент №2</h1>
         <span className="text-sm text-stone-500">{step + 1} / {questions.length}</span>
       </div>
 

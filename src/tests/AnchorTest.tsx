@@ -98,7 +98,13 @@ export default function AnchorTest({ profile, setProfile }: Props) {
   if (finished) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Эффект якоря</h1>
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 mb-6">
+          <p className="text-sm text-green-700 mb-2">Это был эксперимент на</p>
+          <h1 className="text-3xl font-bold text-green-800 mb-2">Эффект якоря</h1>
+          <p className="text-stone-600">Первое число, которое ты видишь, влияет на твои оценки — даже если оно случайное.</p>
+        </div>
+        
+        <h2 className="text-xl font-bold text-stone-800 mb-4">Разбор твоих ответов</h2>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <h2 className="font-semibold text-stone-800 mb-4">Разбор ответов</h2>
@@ -234,7 +240,7 @@ export default function AnchorTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эффект якоря</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эксперимент №4</h1>
         <span className="text-sm text-stone-500">{step + 1} / {sequence.length}</span>
       </div>
 

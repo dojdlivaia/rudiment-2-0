@@ -99,7 +99,13 @@ export default function SunkCostTest({ profile, setProfile }: Props) {
     
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Ошибка невозвратных затрат</h1>
+        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6 mb-6">
+          <p className="text-sm text-orange-700 mb-2">Это был эксперимент на</p>
+          <h1 className="text-3xl font-bold text-orange-800 mb-2">Ошибка невозвратных затрат</h1>
+          <p className="text-stone-600">Мы продолжаем вкладывать в то, что не работает, потому что уже вложили много.</p>
+        </div>
+        
+        <h2 className="text-xl font-bold text-stone-800 mb-4">Твои результаты</h2>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
@@ -158,7 +164,7 @@ export default function SunkCostTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Ошибка невозвратных затрат</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эксперимент №10</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

@@ -126,7 +126,13 @@ export default function HindsightTest({ profile, setProfile }: Props) {
     
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Эффект «я так и знал!»</h1>
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-6">
+          <p className="text-sm text-amber-700 mb-2">Это был эксперимент на</p>
+          <h1 className="text-3xl font-bold text-amber-800 mb-2">Эффект «я так и знал!»</h1>
+          <p className="text-stone-600">После того, как узнал результат, кажется, что предсказал бы. Но это иллюзия.</p>
+        </div>
+        
+        <h2 className="text-xl font-bold text-stone-800 mb-4">Твои результаты</h2>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
@@ -205,7 +211,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эффект «я так и знал!»</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эксперимент №9</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

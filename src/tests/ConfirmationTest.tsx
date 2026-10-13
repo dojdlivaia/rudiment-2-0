@@ -198,7 +198,13 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
     
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-stone-800 mb-6">Результат: Склонность к подтверждению</h1>
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-6 mb-6">
+          <p className="text-sm text-purple-700 mb-2">Это был эксперимент на</p>
+          <h1 className="text-3xl font-bold text-purple-800 mb-2">Склонность к подтверждению</h1>
+          <p className="text-stone-600">Мы ищем информацию, которая подтверждает наши убеждения, и игнорируем противоречия.</p>
+        </div>
+        
+        <h2 className="text-xl font-bold text-stone-800 mb-4">Твои результаты</h2>
         
         <div className="bg-white rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="text-center mb-4">
@@ -272,7 +278,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Склонность к подтверждению</h1>
+        <h1 className="text-xl font-bold text-stone-800">Эксперимент №8</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

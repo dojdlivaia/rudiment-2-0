@@ -90,9 +90,28 @@ export default function ProfilePage({ profile }: Props) {
         <div className="py-20">
           <div className="text-6xl mb-4">🧠</div>
           <h1 className="text-2xl font-bold text-stone-800 mb-2">Профиль пока пуст</h1>
-          <p className="text-stone-500 mb-6">Пройди хотя бы пару тестов, чтобы увидеть свой когнитивный профиль</p>
+          <p className="text-stone-500 mb-6">Пройди хотя бы пару экспериментов, чтобы увидеть свой профиль</p>
           <a href="#/tests" className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold">
-            К тестам
+            К экспериментам
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // Блокировка профиля до 4 тестов
+  if (profile.testResults.length < 4) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 animate-fade-in text-center">
+        <div className="py-20">
+          <div className="text-6xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold text-stone-800 mb-2">Профиль скоро откроется</h1>
+          <p className="text-stone-500 mb-2">Пройди ещё {4 - profile.testResults.length} эксперимент(а)</p>
+          <p className="text-stone-400 text-sm mb-6">
+            Мы не хотим праймить тебя на остальные искажения. Сначала — опыт, потом — анализ.
+          </p>
+          <a href="#/tests" className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold">
+            Продолжить эксперименты
           </a>
         </div>
       </div>

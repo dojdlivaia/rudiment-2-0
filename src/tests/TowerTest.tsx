@@ -222,7 +222,7 @@ export default function TowerTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №11</h1>
+        <h1 className="text-xl font-bold text-stone-800">Головоломка с дисками</h1>
         <div className="flex items-center gap-3">
           <span className="text-sm text-stone-500">Ходы: {moves}</span>
           <button onClick={() => startGame(diskCount)} className="p-1 hover:bg-stone-100 rounded">

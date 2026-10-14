@@ -49,6 +49,27 @@ const allScenarios = [
     event: 'Спортсмен установил мировой рекорд',
     outcome: 'На следующих соревнованиях он показал результат на 15% хуже',
   },
+  // Distractors — нейтральные/позитивные сценарии
+  {
+    id: 9,
+    event: 'В городе открыли новый парк',
+    outcome: 'Парк стал популярным местом отдыха',
+  },
+  {
+    id: 10,
+    event: 'Школа внедрила новую методику обучения',
+    outcome: 'Успеваемость учеников улучшилась',
+  },
+  {
+    id: 11,
+    event: 'Компания Д запустила программу лояльности',
+    outcome: 'Количество повторных покупок выросло на 30%',
+  },
+  {
+    id: 12,
+    event: 'Музей провёл выставку современного искусства',
+    outcome: 'Выставка привлекла рекордное количество посетителей',
+  },
   {
     id: 9,
     event: 'Ресторан открылся в центре города с новым меню',
@@ -211,7 +232,7 @@ export default function HindsightTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №9</h1>
+        <h1 className="text-xl font-bold text-stone-800">Исторические сценарии</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

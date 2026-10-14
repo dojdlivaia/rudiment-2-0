@@ -278,7 +278,7 @@ export default function ConfirmationTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №8</h1>
+        <h1 className="text-xl font-bold text-stone-800">Изучение материалов</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 

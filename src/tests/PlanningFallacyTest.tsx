@@ -11,32 +11,37 @@ interface Props {
 const tasks = [
   {
     id: 1,
+    role: '📧 Задача от руководителя',
     title: 'Написать email коллеге',
-    description: 'Короткое письмо с вопросом о встрече',
-    typicalTime: 10, // минут
+    description: 'Короткое письмо с вопросом о встрече. Нужно отправить до конца дня.',
+    typicalTime: 10,
   },
   {
     id: 2,
+    role: '🍝 Личный план на вечер',
     title: 'Приготовить ужин',
-    description: 'Простое блюдо: pasta с овощами',
+    description: 'Простое блюдо: pasta с овощами. Продукты уже куплены.',
     typicalTime: 30,
   },
   {
     id: 3,
+    role: '📚 Обучение',
     title: 'Прочитать статью',
-    description: 'Длинная статья (2000 слов) на знакомую тему',
+    description: 'Длинная статья (2000 слов) на знакомую тему. Нужно законспектировать ключевые моменты.',
     typicalTime: 15,
   },
   {
     id: 4,
+    role: '💼 Проект на работе',
     title: 'Сделать презентацию',
-    description: '5 слайдов с базовой информацией',
+    description: '5 слайдов с базовой информацией для совещания завтра утром.',
     typicalTime: 45,
   },
   {
     id: 5,
+    role: '🏠 Быт',
     title: 'Убрать квартиру',
-    description: 'Генеральная уборка 2-комнатной квартиры',
+    description: 'Генеральная уборка 2-комнатной квартиры. Пылесос, мытьё полов, протирка пыли.',
     typicalTime: 120,
   },
 ];
@@ -208,7 +213,7 @@ export default function PlanningTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №7</h1>
+        <h1 className="text-xl font-bold text-stone-800">Оценка времени</h1>
         <span className="text-sm text-stone-500">{step + 1} / {tasks.length}</span>
       </div>
 
@@ -220,6 +225,9 @@ export default function PlanningTest({ profile, setProfile }: Props) {
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6">
+        <div className="inline-block bg-violet-100 text-violet-700 text-xs font-medium px-3 py-1 rounded-full mb-3">
+          {currentTask.role}
+        </div>
         <h2 className="text-lg font-semibold text-stone-800 mb-2">{currentTask.title}</h2>
         <p className="text-stone-600 mb-6">{currentTask.description}</p>
         

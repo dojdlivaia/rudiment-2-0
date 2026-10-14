@@ -178,7 +178,7 @@ export default function StatisticalTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №3</h1>
+        <h1 className="text-xl font-bold text-stone-800">Задачи на вероятность</h1>
         <span className="text-sm text-stone-500">{step + 1} / {questions.length}</span>
       </div>
 

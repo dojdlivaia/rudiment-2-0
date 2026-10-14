@@ -11,6 +11,7 @@ interface Props {
 const scenarios = [
   {
     id: 1,
+    role: '🎫 Личные планы',
     title: 'Концерт',
     text: 'Ты купил билет на концерт за 5000 рублей. В день концерта началась сильная метель, дороги закрыты. Добираться 3 часа в опасных условиях. Пойдёшь на концерт?',
     options: [
@@ -22,6 +23,7 @@ const scenarios = [
   },
   {
     id: 2,
+    role: '💼 Работа',
     title: 'Проект',
     text: 'Ты вложил 6 месяцев и 500 000 рублей в проект. Понял, что идея не работает и рынок не нужен. Продолжишь?',
     options: [
@@ -33,6 +35,7 @@ const scenarios = [
   },
   {
     id: 3,
+    role: '🎬 Досуг',
     title: 'Кино',
     text: 'Ты заплатил за билет в кино 800 рублей. Через 30 минут понимаешь, что фильм ужасный. Досмотришь до конца?',
     options: [
@@ -44,6 +47,7 @@ const scenarios = [
   },
   {
     id: 4,
+    role: '❤️ Личная жизнь',
     title: 'Отношения',
     text: 'Ты 3 года в отношениях, которые тебя не устраивают. Друзья говорят, что ты выглядишь несчастным. Останешься?',
     options: [
@@ -55,6 +59,7 @@ const scenarios = [
   },
   {
     id: 5,
+    role: '💰 Инвестиции',
     title: 'Акции',
     text: 'Ты купил акции компании за 100 000 рублей. Сейчас они стоят 60 000. Аналитики говорят, что компания на грани банкротства. Продашь?',
     options: [
@@ -164,7 +169,7 @@ export default function SunkCostTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №10</h1>
+        <h1 className="text-xl font-bold text-stone-800">Жизненные решения</h1>
         <span className="text-sm text-stone-500">{step + 1} / {scenarios.length}</span>
       </div>
 
@@ -176,6 +181,9 @@ export default function SunkCostTest({ profile, setProfile }: Props) {
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6">
+        <div className="inline-block bg-orange-100 text-orange-700 text-xs font-medium px-3 py-1 rounded-full mb-3">
+          {currentScenario.role}
+        </div>
         <h2 className="text-lg font-semibold text-stone-800 mb-3">{currentScenario.title}</h2>
         <p className="text-stone-600 mb-6">{currentScenario.text}</p>
         

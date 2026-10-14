@@ -317,7 +317,7 @@ export default function FramingTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №6</h1>
+        <h1 className="text-xl font-bold text-stone-800">Чтение описаний</h1>
         <span className="text-sm text-stone-500">{currentStep + 1} / {totalSteps}</span>
       </div>
 

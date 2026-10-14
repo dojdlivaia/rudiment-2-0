@@ -248,7 +248,7 @@ export default function IllusionTest({ profile, setProfile }: Props) {
       </Link>
 
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-stone-800">Эксперимент №1</h1>
+        <h1 className="text-xl font-bold text-stone-800">Тест на внимательность</h1>
         <span className="text-sm text-stone-500">{step + 1} / {illusions.length}</span>
       </div>
 
